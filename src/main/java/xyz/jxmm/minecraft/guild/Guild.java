@@ -142,11 +142,12 @@ public class Guild {
                             "%)"));
 
             //标签 & 颜色
-            if (json.has("tagColor")) {
-                chain.append(new PlainText(" " + Nick.color(json.get("tagColor").getAsString())));
-            }
+
             if (json.has("tag")) {
                 chain.append(new PlainText("\n标签: "));
+                if (json.has("tagColor")) {
+                    chain.append(new PlainText(" " + Nick.color(json.get("tagColor").getAsString())));
+                }
                 chain.append(new PlainText("[" + json.get("tag").getAsString() + "]"));
             }
 
