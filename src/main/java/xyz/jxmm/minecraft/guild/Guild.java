@@ -28,7 +28,7 @@ public class Guild {
     static DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
     public static void common(String msg, Long sender, Group group, MessageChainBuilder chain) {
-        JsonObject json = new JsonObject();
+        JsonObject json;
         String id = null;
         if (msg.startsWith("player")) { //玩家ID
             msg = msg.replaceAll("player ", "");
@@ -53,7 +53,7 @@ public class Guild {
 
 
         JsonArray members;
-        JsonArray ranks = new JsonArray();
+        //JsonArray ranks = new JsonArray();
         JsonObject achievements = new JsonObject();
         JsonArray preferredGames = new JsonArray();
         JsonObject guildExpByGameType = new JsonObject();
@@ -82,7 +82,7 @@ public class Guild {
             }
 
             chain.append(new PlainText("\n成员数量: "));
-            chain.append(new PlainText(String.valueOf(members.size())));
+            chain.append(new PlainText(members.size() + "/125"));
 
             chain.append(new PlainText("\n公会创建时间: "));
             long created = json.get("created").getAsLong();
@@ -142,13 +142,14 @@ public class Guild {
                             "%)"));
 
             //标签 & 颜色
-            if (json.has("tag")) {
-                chain.append(new PlainText("\n标签: "));
-                chain.append(new PlainText(json.get("tag").getAsString()));
-            }
             if (json.has("tagColor")) {
                 chain.append(new PlainText(" " + Nick.color(json.get("tagColor").getAsString())));
             }
+            if (json.has("tag")) {
+                chain.append(new PlainText("\n标签: "));
+                chain.append(new PlainText("[" + json.get("tag").getAsString() + "]"));
+            }
+
 
             //公会成就
             achievementChain.append(new PlainText("公会成就:\n"));
@@ -185,14 +186,13 @@ public class Guild {
             }
             achievementChain.append(new PlainText(formatExp(sum)));
             int weekExp = sum; //周 平均每位成员经验
-            boolean activation = sum == 0;
 
             //周每日
             for (String s : set) {
                 achievementChain.append(new PlainText("\n    " + s + ": "));
                 sum = 0;
                 for (int i = 0; i < members.size(); i++) {
-                    JsonObject expHistory = new JsonObject();
+                    JsonObject expHistory;
                     if (determine(members.get(i).getAsJsonObject(), "expHistory")) {
                         expHistory = members.get(i).getAsJsonObject().get("expHistory").getAsJsonObject();
                     } else continue;
