@@ -79,8 +79,7 @@ public class Hypixel {
 
 
         } else if (handle.startsWith(" arc")) {
-            ID.append(handle.replaceAll(" arcade ", ""));
-            ID.append(handle.replaceAll(" arc ", ""));
+            ID.append(handle.replaceAll(" arcade ", "").replaceAll(" arc ", ""));
             type.append("arc");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
