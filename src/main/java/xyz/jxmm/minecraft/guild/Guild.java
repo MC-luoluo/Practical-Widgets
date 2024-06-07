@@ -71,7 +71,7 @@ public class Guild {
             if (json.has("preferredGames")) preferredGames = json.get("preferredGames").getAsJsonArray();
             if (json.has("guildExpByGameType")) guildExpByGameType = json.get("guildExpByGameType").getAsJsonObject();
 
-            chain.append(new PlainText("\n公会名称: "));
+            chain.append(new PlainText("公会名称: "));
             chain.append(new PlainText(json.get("name").getAsString()));
 
             chain.append(new PlainText("\n会长: "));
@@ -225,7 +225,7 @@ public class Guild {
                 String uuid = MJURLConnect.moJangURLConnect(id, "name");
 
                 membersChain.append(new PlainText("成员: "));
-                membersChain.append(new PlainText(MJURLConnect.moJangURLConnect(uuid, "name")));
+                membersChain.append(new PlainText(MJURLConnect.moJangURLConnect(uuid, "uuid")));
 
 
                 for (int i = 0; i < members.size(); i++) {
