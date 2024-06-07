@@ -44,7 +44,7 @@ public class Hypixel {
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
-            if (!stringBuilder.toString().equals("")) {
+            if (!stringBuilder.toString().isEmpty()) {
                 run(type.toString(), json, chain, sender, group);
             }
 
@@ -55,7 +55,7 @@ public class Hypixel {
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
-            if (!stringBuilder.toString().equals("")) {
+            if (!stringBuilder.toString().isEmpty()) {
                 run(type.toString(), json, chain, sender, group);
             }
 
@@ -67,7 +67,7 @@ public class Hypixel {
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
-            if (!stringBuilder.toString().equals("")) {
+            if (!stringBuilder.toString().isEmpty()) {
                 JsonObject recentGames = new Gson().fromJson(RecentGames.main(ID.toString(), group, chain), JsonObject.class);
                 JsonObject guild = new Gson().fromJson(Tool.main(ID.toString(), group, chain, "player"), JsonObject.class);
                 JsonObject online = new Gson().fromJson(Online.main(ID.toString(), group, chain), JsonObject.class);
@@ -79,13 +79,14 @@ public class Hypixel {
 
 
         } else if (handle.startsWith(" arc")) {
+            ID.append(handle.replaceAll(" arcade ", ""));
             ID.append(handle.replaceAll(" arc ", ""));
             type.append("arc");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
-            if (!stringBuilder.toString().equals("")) {
+            if (!stringBuilder.toString().isEmpty()) {
                 run(type.toString(), json, chain, sender, group);
             }
 
@@ -96,7 +97,7 @@ public class Hypixel {
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
-            if (!stringBuilder.toString().equals("")) {
+            if (!stringBuilder.toString().isEmpty()) {
                 run(type.toString(), json, chain, sender, group);
             }
 
@@ -107,7 +108,7 @@ public class Hypixel {
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
-            if (!stringBuilder.toString().equals("")) {
+            if (!stringBuilder.toString().isEmpty()) {
                 run(type.toString(), json, chain, sender, group);
             }
 
@@ -118,7 +119,7 @@ public class Hypixel {
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
-            if (!stringBuilder.toString().equals("")) {
+            if (!stringBuilder.toString().isEmpty()) {
                 run(type.toString(), json, chain, sender, group);
             }
         } else if (handle.startsWith(" guild")) {
@@ -252,6 +253,6 @@ public class Hypixel {
     }
 
     public static Boolean value(String ID, Group group, MessageChainBuilder chain) {
-        return !analysis(ID, group, chain).equals("");
+        return !analysis(ID, group, chain).isEmpty();
     }
 }

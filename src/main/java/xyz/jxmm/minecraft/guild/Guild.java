@@ -47,7 +47,7 @@ public class Guild {
     }
 
     public static void guild(JsonObject json, Long sender, Group group, String id) {
-        MessageChainBuilder chain = new MessageChainBuilder().append(MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]"));
+        MessageChainBuilder chain = new MessageChainBuilder();
         MessageChainBuilder achievementChain = new MessageChainBuilder();
         MessageChainBuilder membersChain = new MessageChainBuilder();
 
@@ -59,7 +59,7 @@ public class Guild {
         JsonObject guildExpByGameType = new JsonObject();
 
         if (json.get("guild").isJsonNull()) {
-            chain.append(new PlainText("\n玩家未加入公会(player) 或 不存在此公会(name)"));
+            chain.append(MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]")).append(new PlainText(" 玩家未加入公会(player) 或 不存在此公会(name)"));
             group.sendMessage(chain.build());
         } else {
             json = json.get("guild").getAsJsonObject();
@@ -222,9 +222,11 @@ public class Guild {
             if (id == null) {
                 membersChain.append(new PlainText("name 查询无玩家信息!"));
             } else {
-                membersChain.append(new PlainText("成员: " + id));
-
                 String uuid = MJURLConnect.moJangURLConnect(id, "name");
+
+                membersChain.append(new PlainText("成员: "));
+                membersChain.append(new PlainText(MJURLConnect.moJangURLConnect(uuid, "name")));
+
 
                 for (int i = 0; i < members.size(); i++) {
                     JsonObject member = members.get(i).getAsJsonObject();

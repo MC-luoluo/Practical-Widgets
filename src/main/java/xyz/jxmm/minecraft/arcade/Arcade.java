@@ -15,8 +15,7 @@ import java.text.DecimalFormat;
 
 public class Arcade {
     public static void arc(JsonObject json, Long sender, Group group){
-        MessageChain at = MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]");
-        MessageChainBuilder chain = new MessageChainBuilder().append(at);
+        MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject playerJson;
         JsonObject acdJson;
         JsonObject achievements;
@@ -26,12 +25,12 @@ public class Arcade {
             playerJson = json.get("player").getAsJsonObject();
             achievements = playerJson.get("achievements").getAsJsonObject();
 
-            chain.append(new PlainText(Nick.nick(playerJson))); //玩家名称前缀
-            chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
-            chain.append(new PlainText(" | 街机游戏 数据如下:"));
-
             if (playerJson.get("stats").getAsJsonObject().has("Arcade")){
                 acdJson = playerJson.get("stats").getAsJsonObject().get("Arcade").getAsJsonObject();
+
+                chain.append(new PlainText(Nick.nick(playerJson))); //玩家名称前缀
+                chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
+                chain.append(new PlainText(" | 街机游戏 数据如下:"));
 
                 //硬币
                 chain.append(new PlainText("\n街机硬币: "));
@@ -653,16 +652,17 @@ public class Arcade {
                     chain.append(new PlainText(String.valueOf(acdJson.get("deaths_zombies_alienarcadium").getAsInt())));
                 } else chain.append(new PlainText("null"));
 
-
-
+                ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
+                builder.add(group.getBot().getId(),group.getBot().getNick(),chain.build());
+                group.sendMessage(builder.build());
 
             } else {
-                chain.append(new PlainText("无法得到 街机游戏 数据"));
+                chain.append(MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]"));
+                chain.append(new PlainText(" 无法获取" + json.get("player").getAsJsonObject().get("displayname").getAsString() + "的街机游戏数据"));
+                group.sendMessage(chain.build());
             }
 
-            ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
-            builder.add(group.getBot().getId(),group.getBot().getNick(),chain.build());
-            group.sendMessage(builder.build());
+
         }
 
 

@@ -16,8 +16,7 @@ import static xyz.jxmm.minecraft.mm.MurderMysteryDetermine.*;
 public class MurderMystery {
 
     public static void mm(JsonObject json, Long sender, Group group) {
-        MessageChain at = MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]");
-        MessageChainBuilder chain = new MessageChainBuilder().append(at);
+        MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject playerJson;
         JsonObject mmJson;
         JsonObject quests;
@@ -26,13 +25,12 @@ public class MurderMystery {
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
 
-
-            chain.append(new PlainText(Nick.nick(playerJson)));
-            chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
-            chain.append(new PlainText(" | 密室杀手 数据如下:"));
-
             if (playerJson.get("stats").getAsJsonObject().has("MurderMystery")) {
                 mmJson = playerJson.get("stats").getAsJsonObject().get("MurderMystery").getAsJsonObject();
+
+                chain.append(new PlainText(Nick.nick(playerJson)));
+                chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
+                chain.append(new PlainText(" | 密室杀手 数据如下:"));
 
                 //硬币
                 chain.append(new PlainText("\n硬币: "));
@@ -485,14 +483,16 @@ public class MurderMystery {
                     chain.append(new PlainText(String.valueOf(mmJson.get("bow_kills_MURDER_INFECTION").getAsInt())));
                 } else chain.append(new PlainText("null"));
 
+                ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
+                builder.add(group.getBot().getId(), group.getBot().getNick(), chain.build());
+                group.sendMessage(builder.build());
+
             } else {
-                chain.append(new PlainText("无法得到 密室杀手 数据"));
+                chain.append(MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]")).append(new PlainText(" 无法获取" + json.get("player").getAsJsonObject().get("displayname").getAsString() + "的密室杀手数据"));
+                group.sendMessage(chain.build());
 
             }
 
-            ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
-            builder.add(group.getBot().getId(), group.getBot().getNick(), chain.build());
-            group.sendMessage(builder.build());
         }
     }
 }
