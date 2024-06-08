@@ -46,6 +46,9 @@ public class ArcadeDetermine {
     public static Boolean games_finished(JsonObject dropper){return dropper.has("games_finished");}
     public static Boolean flawless_games(JsonObject dropper){return dropper.has("flawless_games");}
     public static Boolean wins_dropper(JsonObject dropper){return dropper.has("wins");}
+    public static Boolean fails_dropper(JsonObject dropper){return dropper.has("fails");}
+    public static Boolean maps_completed(JsonObject dropper){return dropper.has("maps_completed");}
+    public static Boolean fastest_game(JsonObject dropper){return dropper.has("fastest_game");}
 
 
 //末影掘战
