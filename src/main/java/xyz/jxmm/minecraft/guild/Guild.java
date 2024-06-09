@@ -238,7 +238,7 @@ public class Guild {
                         //加入时间
                         membersChain.append(new PlainText("\n加入时间: "));
                         instant = Instant.ofEpochMilli(member.get("joined").getAsLong());
-                        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+                        LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
                         membersChain.append(new PlainText(String.valueOf(localDate)));
 
                         //任务
