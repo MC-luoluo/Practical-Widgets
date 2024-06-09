@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Player {
-    public static void player(JsonObject json, JsonObject recentGames, JsonObject guild, JsonObject online, Long sender, Group group) {
+    public static void player(JsonObject json, JsonObject guild, JsonObject online, Long sender, Group group) {
         MessageChain at = MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]");
         MessageChainBuilder chain = new MessageChainBuilder().append(at);
         JsonObject playerJson;
@@ -118,9 +118,9 @@ public class Player {
                 chain.append(new PlainText("null"));
             }
 
-            if (PlayerDetermine.recentGames(recentGames)) {
+            if (PlayerDetermine.recentGames(playerJson)) {
                 chain.append(new PlainText("\n最近游玩的模式: "));
-                chain.append(new PlainText(recentGames.get("games").getAsJsonArray().get(0).getAsJsonObject().get("gameType").getAsString()));
+                chain.append(new PlainText(playerJson.get("mostRecentGameType").getAsString()));
             }
 
             chain.append(new PlainText("\n成就点数: "));

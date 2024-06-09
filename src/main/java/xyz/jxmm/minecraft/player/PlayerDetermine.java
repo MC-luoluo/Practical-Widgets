@@ -58,8 +58,8 @@ public class PlayerDetermine {
     V0.4.2版本更新注释
      */
 
-    public static Boolean recentGames(JsonObject recentGames){
-        return recentGames.get("games").getAsJsonArray().size() > 0;
+    public static Boolean recentGames(JsonObject playerJson){
+        return playerJson.has("mostRecentGameType");
     }
 
     public static Boolean achievementPoints(JsonObject playerJson){

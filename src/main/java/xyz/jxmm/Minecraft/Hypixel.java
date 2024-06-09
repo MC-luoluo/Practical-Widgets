@@ -16,7 +16,6 @@ import xyz.jxmm.minecraft.guild.Tool;
 import xyz.jxmm.minecraft.mm.MurderMystery;
 import xyz.jxmm.minecraft.player.Online;
 import xyz.jxmm.minecraft.player.Player;
-import xyz.jxmm.minecraft.player.RecentGames;
 import xyz.jxmm.minecraft.sw.SkyWars;
 import xyz.jxmm.perm.Determine;
 
@@ -68,12 +67,11 @@ public class Hypixel {
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                JsonObject recentGames = new Gson().fromJson(RecentGames.main(ID.toString(), group, chain), JsonObject.class);
                 JsonObject guild = new Gson().fromJson(Tool.main(ID.toString(), group, chain, "player"), JsonObject.class);
                 JsonObject online = new Gson().fromJson(Online.main(ID.toString(), group, chain), JsonObject.class);
 
-                if (error(json, chain, group) && error(recentGames, chain, group) && error(guild, chain, group) && error(online, chain, group)) {
-                    Player.player(json, recentGames, guild, online, sender, group);
+                if (error(json, chain, group) && error(guild, chain, group) && error(online, chain, group)) {
+                    Player.player(json, guild, online, sender, group);
                 }
             }
 
@@ -229,9 +227,9 @@ public class Hypixel {
                 return "";
             default:
                 //从hypixel官方API得到用户数据
-                StringBuilder stringBuilder = new StringBuilder();
+                String stringBuilder = hypixelURLConnect(uuid);
 
-                if (hypixelURLConnect(uuid).equals("noHypixelAPI")) {
+                if (stringBuilder.equals("noHypixelAPI")) {
                     chain.append("请前往配置文件填写hypixelAPI后重试");
 
                     System.out.println("以下出现的报错如果是 NullPointerException, 这是正常现象，因为您未填写HypixelAPI, 如果不是请联系作者");
@@ -239,8 +237,7 @@ public class Hypixel {
                     group.sendMessage(chain.build());
                     return "";
                 } else {
-                    stringBuilder.append(hypixelURLConnect(uuid));
-                    return stringBuilder.toString();
+                    return stringBuilder;
                 }
         }
     }

@@ -39,19 +39,7 @@ public class RecentGames {
             group.sendMessage(chain.build());
             return "";
         } else {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            if (recent(uuid).equals("noHypixelAPI")){
-                chain.append("请前往配置文件填写hypixelAPI后重试");
-
-                System.out.println("以下出现的报错如果是 NullPointerException, 这是正常现象，因为您未填写HypixelAPI, 如果不是请联系作者");
-                System.out.println("如果您在配置文件未找到HypixelAPI填写位置,请重启mirai后检查配置文件, 如果还是没有请联系作者");
-                group.sendMessage(chain.build());
-                return "";
-            } else {
-                stringBuilder.append(recent(uuid));
-                return stringBuilder.toString();
-            }
+            return recent(uuid);
         }
     }
 
