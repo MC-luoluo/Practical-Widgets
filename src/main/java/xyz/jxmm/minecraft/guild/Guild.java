@@ -34,9 +34,12 @@ public class Guild {
             msg = msg.replaceAll("player ", "");
             id = msg;
             json = new Gson().fromJson(Tool.main(msg, group, chain, "player"), JsonObject.class);
-        } else if (msg.startsWith("name")) { //公会name
+        } else if (msg.startsWith("name ")) { //公会name
             msg = msg.replaceAll("name ", "");
             json = new Gson().fromJson(Tool.guild(msg, "name"), JsonObject.class);
+        } else if (msg.startsWith("id ")) { //公会name
+            msg = msg.replaceAll("id ", "");
+            json = new Gson().fromJson(Tool.guild(msg, "id"), JsonObject.class);
         } else { //默认 玩家ID
             id = msg;
             json = new Gson().fromJson(Tool.main(msg, group, chain, "player"), JsonObject.class);
@@ -74,6 +77,18 @@ public class Guild {
             chain.append(new PlainText("公会名称: "));
             chain.append(new PlainText(json.get("name").getAsString()));
 
+            //标签 & 颜色
+            if (json.has("tag")) {
+                //chain.append(new PlainText("\n标签: "));
+                chain.append(new PlainText(" [" + json.get("tag").getAsString() + "]"));
+                if (json.has("tagColor")) {
+                    chain.append(new PlainText("(" + Nick.color(json.get("tagColor").getAsString()) + ")"));
+                }
+            }
+
+            chain.append(new PlainText("\n公会id: "));
+            chain.append(new PlainText(json.get("_id").getAsString()));
+
             chain.append(new PlainText("\n会长: "));
             for (int i = 0; i < members.size(); i++) {
                 if (members.get(i).getAsJsonObject().get("rank").getAsString().equals("Guild Master")) {
@@ -89,12 +104,6 @@ public class Guild {
             Instant instant = Instant.ofEpochMilli(created);
             LocalDateTime localDateTime = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
             chain.append(new PlainText(localDateTime.toString()));
-
-            //描述
-            if (json.has("description")) {
-                chain.append(new PlainText("\n描述: "));
-                chain.append(new PlainText(json.get("description").getAsString()));
-            }
 
             //经验 & 等级
             int exp = json.get("exp").getAsInt();
@@ -114,9 +123,11 @@ public class Guild {
             }
             chain.append(new PlainText(String.valueOf(level)));
 
-            chain.append(new PlainText("\n总经验: "));
-            int ex = json.get("exp").getAsInt();
-            chain.append(new PlainText(formatExp(ex)));
+            //chain.append(new PlainText("\n经验进度: "));
+
+            int ex/* = json.get("exp").getAsInt()*/;
+            //chain.append(new PlainText(formatExp(ex)));
+
 
             String target = "100K";
             exp = json.get("exp").getAsInt();
@@ -136,19 +147,15 @@ public class Guild {
                 exp -= 3000000;
             }
             chain.append(new PlainText(
-                    "(" + decimalFormat.format((float) exp / (float) 1000000) +
+                    " (" + decimalFormat.format((float) exp / (float) 1000000) +
                             "/" + target + " " +
                             decimalFormat.format((float) exp / (float) target1 * 100) +
                             "%)"));
 
-            //标签 & 颜色
-
-            if (json.has("tag")) {
-                chain.append(new PlainText("\n标签: "));
-                if (json.has("tagColor")) {
-                    chain.append(new PlainText(" " + Nick.color(json.get("tagColor").getAsString())));
-                }
-                chain.append(new PlainText("[" + json.get("tag").getAsString() + "]"));
+            //描述
+            if (json.has("description")) {
+                chain.append(new PlainText("\n描述: "));
+                chain.append(new PlainText(json.get("description").getAsString()));
             }
 
 
@@ -219,9 +226,9 @@ public class Guild {
                             (float) members.size())
             ));
 
-            if (id == null) {
-                membersChain.append(new PlainText("name 查询无玩家信息!"));
-            } else {
+            if (id != null) {
+                //membersChain.append(new PlainText("name 查询无玩家信息!"));
+                //} else {
                 String uuid = MJURLConnect.moJangURLConnect(id, "name");
 
                 membersChain.append(new PlainText("成员: "));
@@ -389,7 +396,9 @@ public class Guild {
             ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
             builder.add(group.getBot().getId(), group.getBot().getNick(), chain.build());
             builder.add(group.getBot().getId(), group.getBot().getNick(), achievementChain.build());
-            builder.add(group.getBot().getId(), group.getBot().getNick(), membersChain.build());
+            if (!membersChain.isEmpty()) {
+                builder.add(group.getBot().getId(), group.getBot().getNick(), membersChain.build());
+            }
             group.sendMessage(builder.build());
         }
 
