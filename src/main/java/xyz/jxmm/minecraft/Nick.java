@@ -6,12 +6,13 @@ import xyz.jxmm.minecraft.player.PlayerDetermine;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Nick {
 
     @NotNull
     public static String nick(JsonObject json) {
-        if (json.has("rank")) {
+        if (json.has("rank") && !Objects.equals(json.get("rank").getAsString(), "NORMAL")) {
             String r1 = json.get("rank").getAsString();
             switch (r1) {
                 case "YOUTUBER":
@@ -34,13 +35,13 @@ public class Nick {
 
                     if (json.has("rankPlusColor")) {  //++颜色
                         n1 = color(json.get("rankPlusColor").getAsString());
-                        if (n1.equals("")) {
+                        if (n1.isEmpty()) {
                             System.out.println(json.get("rankPlusColor").getAsString());
                         }
                     }
                     if (json.has("monthlyRankColor")) {  //rank颜色
                         n2 = color(json.get("monthlyRankColor").getAsString());
-                        if (n2.equals("")) {
+                        if (n2.isEmpty()) {
                             System.out.println(json.get("monthlyRankColor").getAsString());
                         }
                     }
