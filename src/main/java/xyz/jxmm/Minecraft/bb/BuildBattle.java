@@ -85,6 +85,13 @@ public class BuildBattle {
                 } else {
                     chain.append(new PlainText("null"));
                 }
+                if (bbJson.has("score")) {
+                    chain.append(new PlainText(" | 平均每场得分: "));
+                    chain.append(new PlainText(decimalFormat.format(
+                            (double) bbJson.get("score").getAsInt() /
+                                    bbJson.get("games_played").getAsInt()
+                    )));
+                }
 
                 chain.append(new PlainText("\n游戏场次: "));
                 if (bbJson.has("games_played")) {
@@ -127,6 +134,32 @@ public class BuildBattle {
                 chain.append(new PlainText(" | 猜对次数: "));
                 if (bbJson.has("correct_guesses")) {
                     chain.append(new PlainText(String.valueOf(bbJson.get("correct_guesses").getAsInt())));
+                } else {
+                    chain.append(new PlainText("null"));
+                }
+
+                chain.append(new PlainText("\n单人模式(1.8)胜场: "));
+                if (bbJson.has("wins_solo_normal")) {
+                    chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_normal").getAsInt())));
+                } else {
+                    chain.append(new PlainText("null"));
+                }
+                chain.append(new PlainText(" | 单人模式(1.14)胜场: "));
+                if (bbJson.has("wins_solo_normal_latest")) {
+                    chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_normal_latest").getAsInt())));
+                } else {
+                    chain.append(new PlainText("null"));
+                }
+
+                chain.append(new PlainText("\n团队模式胜场: "));
+                if (bbJson.has("wins_teams_normal")) {
+                    chain.append(new PlainText(String.valueOf(bbJson.get("wins_teams_normal").getAsInt())));
+                } else {
+                    chain.append(new PlainText("null"));
+                }
+                chain.append(new PlainText(" | 高手模式胜场: "));
+                if (bbJson.has("wins_solo_pro")) {
+                    chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_pro").getAsInt())));
                 } else {
                     chain.append(new PlainText("null"));
                 }
