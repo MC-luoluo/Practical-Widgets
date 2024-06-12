@@ -421,7 +421,7 @@ public class Arcade {
                     } else chain.append(new PlainText("null"));
 
                     chain.append(new PlainText("\n    胜场数: "));
-                    if (pixel_party(pixel_party)) {
+                    if (wins_pixel_party(pixel_party)) {
                         chain.append(new PlainText(String.valueOf(pixel_party.get("wins").getAsInt())));
                     } else chain.append(new PlainText("null"));
 
