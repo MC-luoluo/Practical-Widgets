@@ -33,17 +33,19 @@ public class SkyWars {
                 swJson = playerJson.get("stats").getAsJsonObject().get("SkyWars").getAsJsonObject();
 
                 if (games_played(swJson)){
-                    chain.append(new PlainText("\n总游戏场次: "));
+                    chain.append(new PlainText("\n游戏场次: "));
                     chain.append(new PlainText(String.valueOf(swJson.get("games_played_skywars").getAsInt())));
-                    chain.append(new PlainText(" | 当前等级: "));
+                    chain.append(new PlainText(" | 等级: "));
                     chain.append(new PlainText(swJson.get("levelFormatted").getAsString().replace(swJson.get("levelFormatted").getAsString().substring(0,2),"").replace("⋆","✨")));
                 }
 
                 if (skywars_experience(swJson)){
+                    /*
                     chain.append(new PlainText("\n当前经验值: "));
                     chain.append(new PlainText(String.valueOf(swJson.get("skywars_experience").getAsDouble())));
-                    chain.append(new PlainText(" | 金币: "));
-                    chain.append(new PlainText(swJson.get("coins").getAsInt() + "💰"));
+                    */
+                    chain.append(new PlainText(" | 硬币: "));
+                    chain.append(new PlainText(String.valueOf(swJson.get("coins").getAsInt())));
                 }
 
                 if (wins(swJson)){
@@ -51,22 +53,27 @@ public class SkyWars {
                     chain.append(new PlainText(String.valueOf(swJson.get("wins").getAsInt())));
                     chain.append(new PlainText(" | 败场数: "));
                     chain.append(new PlainText(String.valueOf(swJson.get("losses").getAsInt())));
-                    chain.append(new PlainText(" | 胜率: "));
+                    chain.append(new PlainText(" | WLR: "));
                     chain.append(new PlainText(String.valueOf(decimalFormat.format(
                             (float) swJson.get("wins").getAsInt() /
                                     (float) swJson.get("losses").getAsInt()))));
                 }
 
                 if (kills(swJson)){
-                    chain.append(new PlainText("\n总击杀数: "));
+                    chain.append(new PlainText("\n击杀数: "));
                     chain.append(new PlainText(String.valueOf(swJson.get("kills").getAsInt())));
-                    chain.append(new PlainText(" | 助攻: "));
-                    chain.append(new PlainText(String.valueOf(swJson.get("assists").getAsInt())));
                     chain.append(new PlainText(" | 死亡数: "));
                     chain.append(new PlainText(String.valueOf(swJson.get("deaths").getAsInt())));
-                    chain.append(new PlainText(" | KD: "));
+                    chain.append(new PlainText(" | KDR: "));
                     chain.append(new PlainText(String.valueOf(decimalFormat.format(
                             (float) swJson.get("kills").getAsInt() /
+                                    (float) swJson.get("deaths").getAsInt()))));
+                    chain.append(new PlainText("\n助攻: "));
+                    chain.append(new PlainText(String.valueOf(swJson.get("assists").getAsInt())));
+                    chain.append(new PlainText(" | (K+A)DR: "));
+                    chain.append(new PlainText(String.valueOf(decimalFormat.format(
+                            ((float) swJson.get("kills").getAsInt() +
+                                    (float) swJson.get("assists").getAsInt()) /
                                     (float) swJson.get("deaths").getAsInt()))));
                 }
 
