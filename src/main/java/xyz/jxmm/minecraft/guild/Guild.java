@@ -155,9 +155,9 @@ public class Guild {
             //描述
             if (json.has("description")) {
                 chain.append(new PlainText("\n描述: "));
-                try{
+                try {
                     chain.append(new PlainText(json.get("description").getAsString()));
-                }catch (UnsupportedOperationException e){
+                } catch (UnsupportedOperationException e) {
                     chain.append(new PlainText("null"));
                 }
             }

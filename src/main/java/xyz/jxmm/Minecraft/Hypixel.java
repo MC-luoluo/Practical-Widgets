@@ -7,6 +7,7 @@ import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
+import xyz.jxmm.minecraft.bb.BuildBattle;
 import xyz.jxmm.minecraft.arcade.Arcade;
 import xyz.jxmm.minecraft.bw.BedWars;
 import xyz.jxmm.minecraft.duels.Duels;
@@ -109,9 +110,9 @@ public class Hypixel {
                 run(type.toString(), json, chain, sender, group);
             }
 
-        } else if (handle.startsWith(" fish")) {
-            ID.append(handle.replaceAll(" fish ", ""));
-            type.append("fish");
+        } else if (handle.startsWith(" bb")) {
+            ID.append(handle.replaceAll(" bb ", ""));
+            type.append("bb");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
@@ -133,7 +134,7 @@ public class Hypixel {
                     "\nsw 空岛战争" +
                     "\nmm 密室杀手" +
                     "\nduels 决斗游戏" +
-                    "\nfish 钓鱼数据" +
+                    "\nbb 建筑大师" +
                     "\nguild 公会数据"));
             chain.append(new PlainText("\n<playerID> ID & 16进制uuid & 带连接符16进制uuid"));
             /*
@@ -169,8 +170,8 @@ public class Hypixel {
                     Duels.duels(json, sender, group);
                     break;
 
-                case "fish":
-                    Fish.fish(json, sender, group);
+                case "bb":
+                    BuildBattle.bb(json, sender, group);
                     break;
 
             }
