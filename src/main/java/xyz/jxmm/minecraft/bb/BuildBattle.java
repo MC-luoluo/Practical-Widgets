@@ -1,17 +1,23 @@
 package xyz.jxmm.minecraft.bb;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
+import xyz.jxmm.minecraft.Leaders;
 import xyz.jxmm.minecraft.Nick;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class BuildBattle {
-    public static void bb(JsonObject json, Long sender, Group group) {
+    public static void bb(JsonObject json, JsonObject Leaders, Long sender, Group group) {
         MessageChain at = MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]");
         MessageChainBuilder chain = new MessageChainBuilder().append(at);
         JsonObject playerJson;
@@ -30,51 +36,69 @@ public class BuildBattle {
                 if (bbJson.has("score")) {
                     int score = bbJson.get("score").getAsInt();
                     chain.append(new PlainText("\n称号: "));
-                    int[] scoreNeeded = {100, 250, 500, 1000, 2000, 3500, 5000, 7500, 10000, 15000, 20000};
-                    int level = 1;
-                    for (int j : scoreNeeded) {
-                        if (score >= j) {
-                            level++;
-                        } else break;
+                    JsonArray l1 = Leaders.get("leaderboards").getAsJsonObject().get("BUILD_BATTLE").getAsJsonArray().get(0).getAsJsonObject().get("leaders").getAsJsonArray();
+                    List<String> l2 = new ArrayList<>();
+                    for (int i = 0; i < 10; i++) {
+                        l2.add(l1.get(i).toString());
                     }
-                    switch (level) {
-                        case 1:
-                            chain.append(new PlainText("初来乍到"));
+                    String[] leaders = l2.toArray(new String[10]);
+                    int lead =1;
+                    for (String l : leaders){
+                        if (Objects.equals(playerJson.get("uuid").getAsString(), l.replaceAll("\"", "").replaceAll("-", ""))){
+                            chain.append(new PlainText("#" + lead + "建筑师"));
                             break;
-                        case 2:
-                            chain.append(new PlainText("未经雕琢"));
+                        }else {lead++;}
+                        if (lead>10){
+                            int[] scoreNeeded = {100, 250, 500, 1000, 2000, 3500, 5000, 7500, 10000, 15000, 20000};
+                            int level = 1;
+                            for (int j : scoreNeeded) {
+                                if (score >= j) {
+                                    level++;
+                                } else break;
+                            }
+                            switch (level) {
+                                case 1:
+                                    chain.append(new PlainText("初来乍到"));
+                                    break;
+                                case 2:
+                                    chain.append(new PlainText("未经雕琢"));
+                                    break;
+                                case 3:
+                                    chain.append(new PlainText("初窥门径"));
+                                    break;
+                                case 4:
+                                    chain.append(new PlainText("学有所成"));
+                                    break;
+                                case 5:
+                                    chain.append(new PlainText("驾轻就熟"));
+                                    break;
+                                case 6:
+                                    chain.append(new PlainText("历练老成"));
+                                    break;
+                                case 7:
+                                    chain.append(new PlainText("技艺精湛"));
+                                    break;
+                                case 8:
+                                    chain.append(new PlainText("炉火纯青"));
+                                    break;
+                                case 9:
+                                    chain.append(new PlainText("技惊四座"));
+                                    break;
+                                case 10:
+                                    chain.append(new PlainText("巧夺天工"));
+                                    break;
+                                case 11:
+                                    chain.append(new PlainText("闻名于世"));
+                                    break;
+                                case 12:
+                                    chain.append(new PlainText("建筑大师"));
+                                    break;
+                            }
                             break;
-                        case 3:
-                            chain.append(new PlainText("初窥门径"));
-                            break;
-                        case 4:
-                            chain.append(new PlainText("学有所成"));
-                            break;
-                        case 5:
-                            chain.append(new PlainText("驾轻就熟"));
-                            break;
-                        case 6:
-                            chain.append(new PlainText("历练老成"));
-                            break;
-                        case 7:
-                            chain.append(new PlainText("技艺精湛"));
-                            break;
-                        case 8:
-                            chain.append(new PlainText("炉火纯青"));
-                            break;
-                        case 9:
-                            chain.append(new PlainText("技惊四座"));
-                            break;
-                        case 10:
-                            chain.append(new PlainText("巧夺天工"));
-                            break;
-                        case 11:
-                            chain.append(new PlainText("闻名于世"));
-                            break;
-                        case 12:
-                            chain.append(new PlainText("建筑大师"));
-                            break;
+                        }
                     }
+
+
                     chain.append(new PlainText(" | 积分: "));
                     chain.append(new PlainText(String.valueOf(score)));
                 }
@@ -138,13 +162,13 @@ public class BuildBattle {
                     chain.append(new PlainText("null"));
                 }
 
-                chain.append(new PlainText("\n单人模式(1.8)胜场: "));
+                chain.append(new PlainText("\n单人1.8胜场: "));
                 if (bbJson.has("wins_solo_normal")) {
                     chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_normal").getAsInt())));
                 } else {
                     chain.append(new PlainText("null"));
                 }
-                chain.append(new PlainText(" | 单人模式(1.14)胜场: "));
+                chain.append(new PlainText(" | 单人1.14胜场: "));
                 if (bbJson.has("wins_solo_normal_latest")) {
                     chain.append(new PlainText(String.valueOf(bbJson.get("wins_solo_normal_latest").getAsInt())));
                 } else {
