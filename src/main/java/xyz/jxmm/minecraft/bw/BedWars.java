@@ -35,9 +35,10 @@ public class BedWars {
                     chain.append(new PlainText(String.valueOf(bwJson.get("games_played_bedwars").getAsInt())));
                     chain.append(new PlainText(" | 等级: "));
                     chain.append(new PlainText(String.valueOf(json.get("player").getAsJsonObject().get("achievements").getAsJsonObject().get("bedwars_level").getAsInt())));
-                    /*部分玩家的连胜获取不成功
-                    chain.append(new PlainText(" | 当前连胜: "));
-                    chain.append(new PlainText(String.valueOf(bwJson.get("winstreak").getAsInt())));*/
+                    if (bwJson.has("winstreak")) {
+                        chain.append(new PlainText(" | 当前连胜: "));
+                        chain.append(new PlainText(String.valueOf(bwJson.get("winstreak").getAsInt())));
+                    }
                 }
 
                 if (kills_bedwars(bwJson)) {

@@ -121,7 +121,7 @@ public class BuildBattle {
                 if (bbJson.has("games_played")) {
                     chain.append(new PlainText(String.valueOf(bbJson.get("games_played").getAsInt())));
                 } else {
-                    chain.append(new PlainText("nell"));
+                    chain.append(new PlainText("null"));
                 }
                 chain.append(new PlainText(" | 胜场数: "));
                 if (bbJson.has("wins")) {
