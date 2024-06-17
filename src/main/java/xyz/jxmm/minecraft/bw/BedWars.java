@@ -6,6 +6,7 @@ import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
+import xyz.jxmm.minecraft.Nick;
 
 import java.text.DecimalFormat;
 
@@ -23,7 +24,7 @@ public class BedWars {
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
 
-            chain.append(new PlainText(xyz.jxmm.minecraft.Nick.nick(playerJson) + " ")); //玩家名称前缀
+            chain.append(new PlainText("\n"+ Nick.nick(playerJson) + " ")); //玩家名称前缀
             chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
             chain.append(new PlainText(" | 起床战争数据:"));
 
@@ -97,7 +98,7 @@ public class BedWars {
                                     (float) bwJson.get("losses_bedwars").getAsInt())));
                 }
             } else {
-                chain.append(new PlainText("无法得到 起床战争 数据"));
+                chain.append(new PlainText("该玩家的起床战争数据为空"));
             }
         } else if (json.get("player").isJsonNull()) {
             chain.append(new PlainText("<playerID> 不存在"));

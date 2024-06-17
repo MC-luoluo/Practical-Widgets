@@ -24,7 +24,7 @@ public class SkyWars {
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
 
-            chain.append(new PlainText(Nick.nick(playerJson))); //玩家名称前缀
+            chain.append(new PlainText("\n" + Nick.nick(playerJson) + " ")); //玩家名称前缀
 
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
             chain.append(new PlainText(" | 空岛战争 数据如下:"));
@@ -32,9 +32,20 @@ public class SkyWars {
             if (playerJson.get("stats").getAsJsonObject().has("SkyWars")) {
                 swJson = playerJson.get("stats").getAsJsonObject().get("SkyWars").getAsJsonObject();
 
-                if (games_played(swJson)) {
-                    chain.append(new PlainText("\n游戏场次: "));
+                if (swJson.has("games_played_skywars")) {
+                    chain.append(new PlainText("\n总游戏场次: "));
                     chain.append(new PlainText(String.valueOf(swJson.get("games_played_skywars").getAsInt())));
+                }
+                if (swJson.has("coins")) {
+                    chain.append(new PlainText(" | 硬币: "));
+                    chain.append(new PlainText(String.valueOf(swJson.get("coins").getAsInt())));
+                }
+
+                if (swJson.has("games")) {
+                    chain.append(new PlainText("\n游戏场次: "));
+                    chain.append(new PlainText(String.valueOf(
+                            swJson.get("wins").getAsInt() +
+                                    swJson.get("losses").getAsInt())));
                     chain.append(new PlainText(" | 等级: "));
                     chain.append(new PlainText(swJson.get("levelFormatted").getAsString().replace(swJson.get("levelFormatted").getAsString().substring(0, 2), "").replace("⋆", "✨")));
                 }
@@ -97,12 +108,14 @@ public class SkyWars {
                 if (swJson.has("games_lab")) {
                     chain.append(new PlainText("\n\n实验模式数据: "));
                     chain.append(new PlainText("\n游戏场次: "));
-                    chain.append(new PlainText(String.valueOf(swJson.get("games_lab").getAsInt())));
+                    chain.append(new PlainText(String.valueOf(
+                            swJson.get("wins_lab").getAsInt() +
+                                    swJson.get("losses_lab").getAsInt())));
                     if (swJson.has("quits_lab")) {
                         chain.append(new PlainText(" | 退出次数: "));
                         chain.append(new PlainText(String.valueOf(swJson.get("quits_lab").getAsInt())));
                     }
-                    if (swJson.has("win_streak_lab")){
+                    if (swJson.has("win_streak_lab")) {
                         chain.append(new PlainText(" | 连胜: "));
                         chain.append(new PlainText(String.valueOf(swJson.get("win_streak_lab").getAsInt())));
                     }
@@ -176,7 +189,7 @@ public class SkyWars {
                 }
                 */
             } else {
-                chain.append(new PlainText("无法得到 空岛战争 数据"));
+                chain.append(new PlainText("该玩家的空岛战争数据为空"));
             }
 
         }
