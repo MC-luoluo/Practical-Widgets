@@ -76,8 +76,12 @@ public class TNTGames {
                 tntrun.append(new PlainText("TNT Run: "));
 
                 if (tntJson.has("record_tntrun")) {
-                    tntrun.append(new PlainText("\n最佳时间(秒): "));
-                    tntrun.append(new PlainText(String.valueOf(tntJson.get("record_tntrun").getAsInt())));
+                    tntrun.append(new PlainText("\n最长生存时间: "));
+                    int record = tntJson.get("record_tntrun").getAsInt();
+                    if (record >= 60) {
+                        tntrun.append(new PlainText((record / 60) + ":" + String.format("%02d", record % 60)));
+                    } else
+                        tntrun.append(new PlainText("0:" + String.format("%02d", record % 60)));
                 }
 
                 tntrun.append(new PlainText("\n胜场: "));
@@ -100,8 +104,12 @@ public class TNTGames {
                 pvprun.append(new PlainText("PVP TNT Run: "));
 
                 if (tntJson.has("record_pvprun")) {
-                    pvprun.append(new PlainText("\n最佳时间(秒): "));
-                    pvprun.append(new PlainText(String.valueOf(tntJson.get("record_pvprun").getAsInt())));
+                    pvprun.append(new PlainText("\n最长生存时间: "));
+                    int record = tntJson.get("record_pvprun").getAsInt();
+                    if (record >= 60) {
+                        pvprun.append(new PlainText((record / 60) + ":" + String.format("%02d", record % 60)));
+                    } else
+                        pvprun.append(new PlainText("0:" + String.format("%02d", record % 60)));
                 }
 
                 pvprun.append(new PlainText("\n胜场: "));
