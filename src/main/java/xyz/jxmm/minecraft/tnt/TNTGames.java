@@ -78,10 +78,7 @@ public class TNTGames {
                 if (tntJson.has("record_tntrun")) {
                     tntrun.append(new PlainText("\n最长生存时间: "));
                     int record = tntJson.get("record_tntrun").getAsInt();
-                    if (record >= 60) {
-                        tntrun.append(new PlainText((record / 60) + ":" + String.format("%02d", record % 60)));
-                    } else
-                        tntrun.append(new PlainText("0:" + String.format("%02d", record % 60)));
+                    tntrun.append(new PlainText((record / 60) + ":" + String.format("%02d", record % 60)));
                 }
 
                 tntrun.append(new PlainText("\n胜场: "));
