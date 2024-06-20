@@ -22,7 +22,7 @@ public class TNTGames {
                 JsonObject tntJson = playerJson.get("stats").getAsJsonObject().get("TNTGames").getAsJsonObject();
                 DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-                chain.append(new PlainText("\n" + Nick.nick(playerJson) + " "));
+                chain.append(new PlainText(Nick.nick(playerJson) + " "));
                 chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
                 chain.append(new PlainText(" | TNT Games 数据如下:"));
 
