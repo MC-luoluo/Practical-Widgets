@@ -7,18 +7,17 @@ import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
-import xyz.jxmm.minecraft.Leaders;
 import xyz.jxmm.minecraft.bb.BuildBattle;
 import xyz.jxmm.minecraft.arcade.Arcade;
 import xyz.jxmm.minecraft.bw.BedWars;
 import xyz.jxmm.minecraft.duels.Duels;
-import xyz.jxmm.minecraft.fish.Fish;
 import xyz.jxmm.minecraft.guild.Guild;
 import xyz.jxmm.minecraft.guild.Tool;
 import xyz.jxmm.minecraft.mm.MurderMystery;
 import xyz.jxmm.minecraft.player.Online;
 import xyz.jxmm.minecraft.player.Player;
 import xyz.jxmm.minecraft.sw.SkyWars;
+import xyz.jxmm.minecraft.tnt.TNTGames;
 import xyz.jxmm.perm.Determine;
 
 import static xyz.jxmm.minecraft.HypURLConnect.hypixelURLConnect;
@@ -28,7 +27,7 @@ public class Hypixel {
 
     public static void hypixel(String msg, Long sender, Group group) {
         //信息部分
-        String handle = msg.substring(3);
+        String handle = msg.toLowerCase().substring(3);
         MessageChain at = MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]");
         MessageChainBuilder chain = new MessageChainBuilder().append(at);
 
@@ -38,7 +37,7 @@ public class Hypixel {
         StringBuilder type = new StringBuilder();
         JsonObject json;
 
-        if (handle.startsWith(" bw")) {
+        if (handle.startsWith(" bw ")) {
             ID.append(handle.replaceAll(" bw ", ""));//得到玩家ID
             type.append("bw");
 
@@ -49,7 +48,7 @@ public class Hypixel {
                 run(type.toString(), json, chain, sender, group);
             }
 
-        } else if (handle.startsWith(" sw")) {
+        } else if (handle.startsWith(" sw ")) {
             ID.append(handle.replaceAll(" sw ", ""));
             type.append("sw");
 
@@ -61,7 +60,7 @@ public class Hypixel {
             }
 
 
-        } else if (handle.startsWith(" player")) {
+        } else if (handle.startsWith(" player ")) {
             ID.append(handle.replaceAll(" player ", ""));
             type.append("player");
 
@@ -89,7 +88,7 @@ public class Hypixel {
                 run(type.toString(), json, chain, sender, group);
             }
 
-        } else if (handle.startsWith(" mm")) {
+        } else if (handle.startsWith(" mm ")) {
             ID.append(handle.replaceAll(" mm ", ""));
             type.append("mm");
 
@@ -100,7 +99,18 @@ public class Hypixel {
                 run(type.toString(), json, chain, sender, group);
             }
 
-        } else if (handle.startsWith(" duels")) {
+        } else if (handle.startsWith(" tnt ")) {
+            ID.append(handle.replaceAll(" tnt ", ""));
+            type.append("tnt");
+
+            stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
+            json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
+
+            if (!stringBuilder.toString().isEmpty()) {
+                run(type.toString(), json, chain, sender, group);
+            }
+
+        } else if (handle.startsWith(" duels ")) {
             ID.append(handle.replaceAll(" duels ", ""));
             type.append("duels");
 
@@ -111,7 +121,7 @@ public class Hypixel {
                 run(type.toString(), json, chain, sender, group);
             }
 
-        } else if (handle.startsWith(" bb")) {
+        } else if (handle.startsWith(" bb ")) {
             ID.append(handle.replaceAll(" bb ", ""));
             type.append("bb");
 
@@ -124,7 +134,7 @@ public class Hypixel {
             }
             BuildBattle.bb(json, leaders, sender, group);
 
-        } else if (handle.startsWith(" guild")) {
+        } else if (handle.startsWith(" guild ")) {
             ID.append(handle.replaceAll(" guild ", ""));
             Guild.common(ID.toString(), sender, group, chain);
 
@@ -134,9 +144,11 @@ public class Hypixel {
             chain.append(new PlainText("hyp <type> <playerID>"));
             chain.append(new PlainText("\n<type>包含如下关键字:" +
                     "\nplayer 玩家系列数据" +
-                    "\narc 街机游戏\nbw 起床战争" +
+                    "\nbw 起床战争" +
                     "\nsw 空岛战争" +
                     "\nmm 密室杀手" +
+                    "\narc 街机游戏" +
+                    "\ntnt 掘战游戏" +
                     "\nduels 决斗游戏" +
                     "\nbb 建筑大师" +
                     "\nguild 公会数据"));
@@ -173,6 +185,9 @@ public class Hypixel {
                 case "duels":
                     Duels.duels(json, sender, group);
                     break;
+
+                case "tnt":
+                    TNTGames.tnt(json, sender, group);
 
             }
         }
@@ -249,7 +264,4 @@ public class Hypixel {
         }
     }
 
-    public static Boolean value(String ID, Group group, MessageChainBuilder chain) {
-        return !analysis(ID, group, chain).isEmpty();
-    }
 }

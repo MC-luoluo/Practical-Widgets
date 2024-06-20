@@ -28,7 +28,7 @@ public class MurderMystery {
             if (playerJson.get("stats").getAsJsonObject().has("MurderMystery")) {
                 mmJson = playerJson.get("stats").getAsJsonObject().get("MurderMystery").getAsJsonObject();
 
-                chain.append(new PlainText(Nick.nick(playerJson)));
+                chain.append(new PlainText(Nick.nick(playerJson) + " "));
                 chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
                 chain.append(new PlainText(" | 密室杀手 数据如下:"));
 
@@ -99,7 +99,7 @@ public class MurderMystery {
 
                 //总KD
                 chain.append(new PlainText(" | K/D: "));
-                if (games(mmJson) && deaths(mmJson)) {
+                if (kills(mmJson) && deaths(mmJson)) {
                     chain.append(new PlainText(decimalFormat.format(
                             (float) mmJson.get("kills").getAsInt() /
                                     (float) mmJson.get("deaths").getAsInt()
@@ -488,7 +488,7 @@ public class MurderMystery {
                 group.sendMessage(builder.build());
 
             } else {
-                chain.append(MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]")).append(new PlainText(" 无法获取" + json.get("player").getAsJsonObject().get("displayname").getAsString() + "的密室杀手数据"));
+                chain.append(MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]")).append(new PlainText(" 该玩家的密室杀手数据为空"));
                 group.sendMessage(chain.build());
 
             }
