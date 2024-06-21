@@ -57,6 +57,21 @@ public class BedWars {
                                     (float) bwJson.get("losses_bedwars").getAsInt())));
                 }
 
+                chain.append(new PlainText("\n摧毁床: "));
+                if (bwJson.has("beds_broken_bedwars")) {
+                    chain.append(new PlainText(String.valueOf(bwJson.get("beds_broken_bedwars").getAsInt())));
+                } else chain.append(new PlainText("0"));
+                chain.append(new PlainText(" | 被摧毁床: "));
+                if (bwJson.has("beds_lost_bedwars")) {
+                    chain.append(new PlainText(String.valueOf(bwJson.get("beds_lost_bedwars").getAsInt())));
+                } else chain.append(new PlainText("0"));
+                if (bwJson.has("beds_broken_bedwars") && bwJson.has("beds_lost_bedwars")) {
+                    chain.append(new PlainText(" | BLR: "));
+                    chain.append(new PlainText(decimalFormat.format(
+                            (float) bwJson.get("beds_broken_bedwars").getAsInt() /
+                                    (float) bwJson.get("beds_lost_bedwars").getAsInt())));
+                }
+
                 chain.append(new PlainText("\n击杀: "));
                 if (bwJson.has("kills_bedwars")) {
                     chain.append(new PlainText(String.valueOf(bwJson.get("kills_bedwars").getAsInt())));
@@ -102,21 +117,6 @@ public class BedWars {
                             (float) (bwJson.get("kills_bedwars").getAsInt() + bwJson.get("final_kills_bedwars").getAsInt()) /
                                     (float) (bwJson.get("deaths_bedwars").getAsInt() + bwJson.get("final_deaths_bedwars").getAsInt())
                     )));
-                }
-
-                chain.append(new PlainText("\n摧毁床: "));
-                if (bwJson.has("beds_broken_bedwars")) {
-                    chain.append(new PlainText(String.valueOf(bwJson.get("beds_broken_bedwars").getAsInt())));
-                } else chain.append(new PlainText("0"));
-                chain.append(new PlainText(" | 被摧毁床: "));
-                if (bwJson.has("beds_lost_bedwars")) {
-                    chain.append(new PlainText(String.valueOf(bwJson.get("beds_lost_bedwars").getAsInt())));
-                } else chain.append(new PlainText("0"));
-                if (bwJson.has("beds_broken_bedwars") && bwJson.has("beds_lost_bedwars")) {
-                    chain.append(new PlainText(" | BLR: "));
-                    chain.append(new PlainText(decimalFormat.format(
-                            (float) bwJson.get("beds_broken_bedwars").getAsInt() /
-                                    (float) bwJson.get("beds_lost_bedwars").getAsInt())));
                 }
 
             } else {
