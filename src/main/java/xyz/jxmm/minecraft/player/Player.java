@@ -76,7 +76,7 @@ public class Player {
                 } else chain.append(new PlainText("0"));
             } else chain.append(new PlainText("0"));
 
-            chain.append(new PlainText("\n首次登录时间: "));
+            chain.append(new PlainText("\n首次登录: "));
             if (PlayerDetermine.firstLogin(playerJson)) {
                 chain.append(new PlainText(simpleDateFormat.format(new Date(playerJson.get("firstLogin").getAsLong()))));
             } else {
@@ -84,12 +84,12 @@ public class Player {
             }
 
             if (PlayerDetermine.lastLogin(playerJson)) {
-                chain.append(new PlainText("\n最后登录时间: "));
+                chain.append(new PlainText("\n最后登录: "));
                 chain.append(new PlainText(simpleDateFormat.format(new Date(playerJson.get("lastLogin").getAsLong()))));
             }
 
             if (PlayerDetermine.lastLogout(playerJson)) {
-                chain.append(new PlainText("\n最后退出时间: "));
+                chain.append(new PlainText("\n最后退出: "));
                 chain.append(new PlainText(simpleDateFormat.format(new Date(playerJson.get("lastLogout").getAsLong()))));
             }
 

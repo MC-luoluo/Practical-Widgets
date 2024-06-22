@@ -7,12 +7,10 @@ import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
-import xyz.jxmm.minecraft.Leaders;
 import xyz.jxmm.minecraft.Nick;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,18 +18,16 @@ public class BuildBattle {
     public static void bb(JsonObject json, JsonObject Leaders, Long sender, Group group) {
         MessageChain at = MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]");
         MessageChainBuilder chain = new MessageChainBuilder().append(at);
-        JsonObject playerJson;
-        JsonObject bbJson;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         if (json.get("player").isJsonObject()) {
-            playerJson = json.get("player").getAsJsonObject();
+            JsonObject playerJson = json.get("player").getAsJsonObject();
 
             if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("BuildBattle")) {
-                bbJson = playerJson.get("stats").getAsJsonObject().get("BuildBattle").getAsJsonObject();
+                JsonObject bbJson = playerJson.get("stats").getAsJsonObject().get("BuildBattle").getAsJsonObject();
                 chain.append(new PlainText("\n" + Nick.nick(playerJson) + " ")); //玩家名称前缀
                 chain.append(new PlainText(playerJson.get("displayname").getAsString()));
-                chain.append(new PlainText(" | 建筑大师 数据如下: "));
+                chain.append(new PlainText(" | 建筑大师数据: "));
 
                 if (bbJson.has("score")) {
                     int score = bbJson.get("score").getAsInt();
@@ -188,9 +184,7 @@ public class BuildBattle {
                     chain.append(new PlainText("null"));
                 }
 
-            } else {
-                chain.append(new PlainText("无法获取该玩家的建筑大师数据"));
-            }
+            } else chain.append(new PlainText("该玩家的建筑大师数据为空"));
             group.sendMessage(chain.build());
         }
 

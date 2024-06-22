@@ -18,6 +18,7 @@ import xyz.jxmm.minecraft.player.Online;
 import xyz.jxmm.minecraft.player.Player;
 import xyz.jxmm.minecraft.sw.SkyWars;
 import xyz.jxmm.minecraft.tnt.TNTGames;
+import xyz.jxmm.minecraft.tourney.tournament;
 import xyz.jxmm.perm.Determine;
 
 import static xyz.jxmm.minecraft.HypURLConnect.hypixelURLConnect;
@@ -121,9 +122,19 @@ public class Hypixel {
                 run(type.toString(), json, chain, sender, group);
             }
 
+        } else if (handle.startsWith(" tourney ")) {
+            ID.append(handle.replaceAll(" tourney ", ""));
+
+            stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
+            json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
+
+            if (!stringBuilder.toString().isEmpty()) {
+                run(type.toString(), json, chain, sender, group);
+            }
+            tournament.tourney(json, sender, group);
+
         } else if (handle.startsWith(" bb ")) {
             ID.append(handle.replaceAll(" bb ", ""));
-            type.append("bb");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
@@ -188,7 +199,7 @@ public class Hypixel {
 
                 case "tnt":
                     TNTGames.tnt(json, sender, group);
-
+                    break;
             }
         }
     }
