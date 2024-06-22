@@ -16,7 +16,7 @@ public class tournament {
     public static void tourney(JsonObject json, Long sender, Group group) {
         MessageChain at = MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]");
         MessageChainBuilder chain = new MessageChainBuilder().append(at);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss", Locale.CHINA);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         if (json.get("player").isJsonObject()) {
             JsonObject playerJson = json.get("player").getAsJsonObject();
             if (playerJson.has("tourney")) {
