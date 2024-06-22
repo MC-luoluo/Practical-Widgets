@@ -33,7 +33,7 @@ public class Duels {
             main.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
             main.append(new PlainText(" | 单挑模式 数据如下:"));
 
-            if (playerJson.get("stats").getAsJsonObject().has("Duels")){
+            if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("Duels")){
                 duelsJson = playerJson.get("stats").getAsJsonObject().get("Duels").getAsJsonObject();
 
                 //硬币

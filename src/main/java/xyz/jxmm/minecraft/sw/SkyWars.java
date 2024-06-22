@@ -29,7 +29,7 @@ public class SkyWars {
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
             chain.append(new PlainText(" | 空岛战争 数据如下:"));
 
-            if (playerJson.get("stats").getAsJsonObject().has("SkyWars")) {
+            if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("SkyWars")) {
                 swJson = playerJson.get("stats").getAsJsonObject().get("SkyWars").getAsJsonObject();
 
                 if (swJson.has("games_played_skywars")) {

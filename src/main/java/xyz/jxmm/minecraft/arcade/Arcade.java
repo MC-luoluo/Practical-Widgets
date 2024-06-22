@@ -25,7 +25,7 @@ public class Arcade {
             playerJson = json.get("player").getAsJsonObject();
             achievements = playerJson.get("achievements").getAsJsonObject();
 
-            if (playerJson.get("stats").getAsJsonObject().has("Arcade")) {
+            if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("Arcade")) {
                 acdJson = playerJson.get("stats").getAsJsonObject().get("Arcade").getAsJsonObject();
 
                 chain.append(new PlainText(Nick.nick(playerJson))); //玩家名称前缀

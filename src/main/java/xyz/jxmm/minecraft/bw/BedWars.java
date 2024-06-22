@@ -17,19 +17,17 @@ public class BedWars {
     public static void bw(JsonObject json, Long sender, Group group) {
         MessageChain at = MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]");
         MessageChainBuilder chain = new MessageChainBuilder().append(at);
-        JsonObject bwJson;
-        JsonObject playerJson;
+        JsonObject playerJson = json.get("player").getAsJsonObject();
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
-        if (json.get("player").isJsonObject()) {
-            playerJson = json.get("player").getAsJsonObject();
+        if (playerJson.has("stats") && json.get("player").isJsonObject()) {
 
             chain.append(new PlainText("\n" + Nick.nick(playerJson) + " ")); //玩家名称前缀
             chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
             chain.append(new PlainText(" | 起床战争数据:"));
 
             if (json.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("Bedwars")) {
-                bwJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("Bedwars").getAsJsonObject();
+                JsonObject bwJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("Bedwars").getAsJsonObject();
 
                 if (games_played_bedwars(bwJson)) {
                     chain.append(new PlainText("\n游戏场次: "));

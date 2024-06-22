@@ -27,7 +27,7 @@ public class BuildBattle {
         if (json.get("player").isJsonObject()) {
             playerJson = json.get("player").getAsJsonObject();
 
-            if (playerJson.get("stats").getAsJsonObject().has("BuildBattle")) {
+            if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("BuildBattle")) {
                 bbJson = playerJson.get("stats").getAsJsonObject().get("BuildBattle").getAsJsonObject();
                 chain.append(new PlainText("\n" + Nick.nick(playerJson) + " ")); //玩家名称前缀
                 chain.append(new PlainText(playerJson.get("displayname").getAsString()));

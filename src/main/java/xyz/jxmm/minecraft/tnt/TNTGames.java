@@ -18,7 +18,7 @@ public class TNTGames {
         if (json.get("player").isJsonObject()) {
             JsonObject playerJson = json.get("player").getAsJsonObject();
 
-            if (playerJson.get("stats").getAsJsonObject().has("TNTGames")) {
+            if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("TNTGames")) {
                 JsonObject tntJson = playerJson.get("stats").getAsJsonObject().get("TNTGames").getAsJsonObject();
                 DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
