@@ -27,7 +27,7 @@ public class SkyWars {
             chain.append(new PlainText("\n" + Nick.nick(playerJson) + " ")); //玩家名称前缀
 
             chain.append(new PlainText(playerJson.get("displayname").getAsString()));
-            chain.append(new PlainText(" | 空岛战争 数据如下:"));
+            chain.append(new PlainText(" | 空岛战争数据:"));
 
             if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("SkyWars")) {
                 swJson = playerJson.get("stats").getAsJsonObject().get("SkyWars").getAsJsonObject();
@@ -43,9 +43,14 @@ public class SkyWars {
 
                 if (swJson.has("games")) {
                     chain.append(new PlainText("\n游戏场次: "));
-                    chain.append(new PlainText(String.valueOf(
-                            swJson.get("wins").getAsInt() +
-                                    swJson.get("losses").getAsInt())));
+                    int temp = 0;
+                    if (swJson.has("wins")) {
+                        temp += swJson.get("wins").getAsInt();
+                    }
+                    if (swJson.has("losses")) {
+                        temp += swJson.get("losses").getAsInt();
+                    }
+                    chain.append(new PlainText(String.valueOf(temp)));
                     chain.append(new PlainText(" | 等级: "));
                     chain.append(new PlainText(swJson.get("levelFormatted").getAsString().replace(swJson.get("levelFormatted").getAsString().substring(0, 2), "").replace("⋆", "✨")));
                 }
@@ -108,9 +113,14 @@ public class SkyWars {
                 if (swJson.has("games_lab")) {
                     chain.append(new PlainText("\n\n实验模式数据: "));
                     chain.append(new PlainText("\n游戏场次: "));
-                    chain.append(new PlainText(String.valueOf(
-                            swJson.get("wins_lab").getAsInt() +
-                                    swJson.get("losses_lab").getAsInt())));
+                    int temp = 0;
+                    if (swJson.has("wins_lab")) {
+                        temp += swJson.get("wins_lab").getAsInt();
+                    }
+                    if (swJson.has("losses_lab")) {
+                        temp += swJson.get("losses_lab").getAsInt();
+                    }
+                    chain.append(new PlainText(String.valueOf(temp)));
                     if (swJson.has("quits_lab")) {
                         chain.append(new PlainText(" | 退出次数: "));
                         chain.append(new PlainText(String.valueOf(swJson.get("quits_lab").getAsInt())));
@@ -119,11 +129,15 @@ public class SkyWars {
                         chain.append(new PlainText(" | 连胜: "));
                         chain.append(new PlainText(String.valueOf(swJson.get("win_streak_lab").getAsInt())));
                     }
+                    chain.append(new PlainText("\n胜场: "));
                     if (swJson.has("wins_lab")) {
-                        chain.append(new PlainText("\n胜场: "));
                         chain.append(new PlainText(String.valueOf(swJson.get("wins_lab").getAsInt())));
+                    } else chain.append(new PlainText("0"));
+                    if (swJson.has("losses_lab")) {
                         chain.append(new PlainText(" | 败场: "));
                         chain.append(new PlainText(String.valueOf(swJson.get("losses_lab").getAsInt())));
+                    }
+                    if (swJson.has("wins_lab") && swJson.has("losses_lab")) {
                         chain.append(new PlainText(" | WLR:"));
                         chain.append(new PlainText(decimalFormat.format(
                                 (float) swJson.get("wins_lab").getAsInt() /
