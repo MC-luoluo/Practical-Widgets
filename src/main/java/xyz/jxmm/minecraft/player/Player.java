@@ -91,6 +91,9 @@ public class Player {
             if (PlayerDetermine.lastLogout(playerJson)) {
                 chain.append(new PlainText("\n最后退出: "));
                 chain.append(new PlainText(simpleDateFormat.format(new Date(playerJson.get("lastLogout").getAsLong()))));
+            } else if (playerJson.has("lastClaimedReward")) {
+                chain.append(new PlainText("\n最后领取每日奖励: "));
+                chain.append(new PlainText(simpleDateFormat.format(new Date(playerJson.get("lastClaimedReward").getAsLong()))));
             }
 
             chain.append(new PlainText("\n使用的语言: "));

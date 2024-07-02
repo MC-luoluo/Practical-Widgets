@@ -2,25 +2,21 @@ package xyz.jxmm.minecraft.guild;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.ForwardMessageBuilder;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
-import xyz.jxmm.tools.MyComparatorValue;
-import xyz.jxmm.minecraft.MJURLConnect;
 import xyz.jxmm.minecraft.Nick;
-import xyz.jxmm.minecraft.guild.Tool;
 
 import java.text.DecimalFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
+import static xyz.jxmm.minecraft.MJURLConnect.moJangURLConnect;
 import static xyz.jxmm.minecraft.guild.GuildDetermine.determine;
 
 public class Guild {
@@ -30,7 +26,14 @@ public class Guild {
     public static void common(String msg, Long sender, Group group, MessageChainBuilder chain) {
         JsonObject json;
         String id = null;
-        if (msg.startsWith("player")) { //玩家ID
+        String type = "";
+
+        if (msg.endsWith(" members")) {
+            type = "members";
+            msg = msg.replaceAll(" members", "");
+        }
+
+        if (msg.startsWith("player ")) { //玩家ID
             msg = msg.replaceAll("player ", "");
             id = msg;
             json = new Gson().fromJson(Tool.main(msg, group, chain, "player"), JsonObject.class);
@@ -45,34 +48,27 @@ public class Guild {
             json = new Gson().fromJson(Tool.main(msg, group, chain, "player"), JsonObject.class);
         }
 
-        guild(json, sender, group, id);
+        guild(json, sender, group, id, type);
 
     }
 
-    public static void guild(JsonObject json, Long sender, Group group, String id) {
+    public static void guild(JsonObject json, Long sender, Group group, String id, String type) {
         MessageChainBuilder chain = new MessageChainBuilder();
         MessageChainBuilder achievementChain = new MessageChainBuilder();
         MessageChainBuilder membersChain = new MessageChainBuilder();
+        MessageChainBuilder membersList = new MessageChainBuilder();
 
 
         JsonArray members;
-        //JsonArray ranks = new JsonArray();
         JsonObject achievements = new JsonObject();
-        JsonArray preferredGames = new JsonArray();
-        JsonObject guildExpByGameType = new JsonObject();
 
         if (json.get("guild").isJsonNull()) {
             chain.append(MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]")).append(new PlainText(" 玩家未加入公会(player) 或 不存在此公会(name)"));
             group.sendMessage(chain.build());
         } else {
             json = json.get("guild").getAsJsonObject();
-            /* ranks不是一定存在的
-            ranks = json.get("ranks").getAsJsonArray();
-            */
             members = json.get("members").getAsJsonArray();
             if (json.has("achievements")) achievements = json.get("achievements").getAsJsonObject();
-            if (json.has("preferredGames")) preferredGames = json.get("preferredGames").getAsJsonArray();
-            if (json.has("guildExpByGameType")) guildExpByGameType = json.get("guildExpByGameType").getAsJsonObject();
 
             chain.append(new PlainText("公会名称: "));
             chain.append(new PlainText(json.get("name").getAsString()));
@@ -92,7 +88,7 @@ public class Guild {
             chain.append(new PlainText("\n会长: "));
             for (int i = 0; i < members.size(); i++) {
                 if (members.get(i).getAsJsonObject().get("rank").getAsString().equals("Guild Master")) {
-                    chain.append(new PlainText(MJURLConnect.moJangURLConnect(members.get(i).getAsJsonObject().get("uuid").getAsString(), "uuid")));
+                    chain.append(new PlainText(moJangURLConnect(members.get(i).getAsJsonObject().get("uuid").getAsString(), "uuid")));
                 }
             }
 
@@ -233,10 +229,10 @@ public class Guild {
             if (id != null) {
                 //membersChain.append(new PlainText("name 查询无玩家信息!"));
                 //} else {
-                String uuid = MJURLConnect.moJangURLConnect(id, "name");
+                String uuid = moJangURLConnect(id, "name");
 
                 membersChain.append(new PlainText("成员: "));
-                membersChain.append(new PlainText(MJURLConnect.moJangURLConnect(uuid, "uuid")));
+                membersChain.append(new PlainText(moJangURLConnect(uuid, "uuid")));
 
 
                 for (int i = 0; i < members.size(); i++) {
@@ -254,7 +250,7 @@ public class Guild {
 
                         //任务
                         if (determine(member, "questParticipation")) {
-                            membersChain.append(new PlainText("\n完成公会任务: "));
+                            membersChain.append(new PlainText("\n完成任务: "));
                             membersChain.append(new PlainText(String.valueOf(member.get("questParticipation").getAsInt())));
                         }
 
@@ -284,46 +280,8 @@ public class Guild {
                                 membersChain.append(new PlainText(String.valueOf(x)));
                                 membersChain.append(new PlainText("/"));
                                 membersChain.append(new PlainText(String.valueOf(members.size())));
-
-                                /*
-                                Map<String, Integer> name = new HashMap<>();
-//                                Map<String,Integer> vue = new HashMap<>();
-                                for (int j = 0; j < members.size(); j++) {
-                                    name.put(members.get(j).getAsJsonObject().get("uuid").getAsString(),
-                                            members.get(j).getAsJsonObject().get("expHistory").getAsJsonObject().get(s).getAsInt());
-//                                    vue = name;
-                                }
-                                List<Map.Entry<String, Integer>> strName = new ArrayList<>(name.entrySet());
-//                                List<Map.Entry<String,Integer>> vueValue = new ArrayList<>(vue.entrySet());
-                                strName.sort(new MyComparatorValue());
-//                                vueValue.sort(new MyComparatorValue());
-
-                                List<String> uuidList = new ArrayList<>();
-                                for (Map.Entry<String, Integer> entry1 : strName) {
-                                    uuidList.add(entry1.getKey());
-                                }
-                                int x = 1;
-                                for (String string : uuidList) {
-                                    if (string.equals(uuid)) {
-                                        if (activation) {
-                                            membersChain.append(new PlainText("1"));
-                                        } else {
-                                            membersChain.append(new PlainText(String.valueOf(x)));
-                                        }
-                                        membersChain.append(new PlainText("/"));
-                                        membersChain.append(new PlainText(String.valueOf(members.size())));
-                                        break;
-                                    } else x++;
-                                }
-                                */
-
-
                             }
-
-
                         }
-
-
                         break;
                     }
                 }
@@ -331,77 +289,32 @@ public class Guild {
 
             }
 
-
-            /*
-            //ranks  职位列表
-            achievementChain.append(new PlainText(" 职位列表: "));
-            StringBuilder stringBuilderDefaultRank = new StringBuilder().append("\n默认职位: ");
-            StringBuilder sbRank = new StringBuilder();
-            for (int i = 0; i < ranks.size(); i++) {
-                JsonObject rank = ranks.get(i).getAsJsonObject();
-                String name = rank.get("name").getAsString();
-                boolean df = rank.get("default").getAsBoolean();
-                String tag = rank.get("tag").isJsonNull() ? "null" : rank.get("tag").getAsString();
-                //创建时间
-                long rankCreated = rank.get("created").getAsLong();
-                Instant instant1 = Instant.ofEpochMilli(rankCreated);
-                LocalDateTime localDateTime1 = instant1.atZone(ZoneId.systemDefault()).toLocalDateTime();
-                //权重
-                int priority = rank.get("priority").getAsInt();
-                //如果 df = true 即为默认职位, 提前写入;
-                stringBuilderDefaultRank.append(df ? name : "") ;
-
-                sbRank.append("\n(").append(i).append(")");
-                sbRank.append("\n  职位名称: ").append(name);
-                sbRank.append("\n  标签: ").append(tag);
-                sbRank.append("\n  创建时间: ").append(localDateTime1);
-                sbRank.append("\n  权重: ").append(priority);
-            }
-            achievementChain.append(new PlainText(stringBuilderDefaultRank.toString()));
-            achievementChain.append(new PlainText(sbRank.toString()));
-
-             */
-
-            /*
-            //成员列表
-            membersChain.append(new PlainText(" 成员列表: "));
-            membersChain.append(new PlainText("总人数: "));
-            int totalMembers = members.size(); //总人数
-            StringBuilder sbMember = new StringBuilder();
-            for (int i = 0; i < members.size(); i++) {
-                JsonObject member = members.get(i).getAsJsonObject();
-                String uuid = member.get("uuid").getAsString();
-                String rank = member.get("rank").getAsString();
-                //加入时间
-                long joined = member.get("joined").getAsLong();
-                Instant instant2 = Instant.ofEpochMilli(joined);
-                LocalDateTime localDateTime2 = instant2.atZone(ZoneId.systemDefault()).toLocalDateTime();
-                int questParticipation = member.has("questParticipation") ? member.get("questParticipation").getAsInt() : 0;
-                //7天内为公会获取的经验
-                long totalExp = 0;
-                JsonObject expHistoryJson = member.get("expHistory").getAsJsonObject();
-                List<Map.Entry<String,JsonElement>> keyList = new ArrayList<>(expHistoryJson.entrySet());
-                for (Map.Entry<String, JsonElement> entry:keyList){
-                    totalExp += entry.getValue().getAsLong();
+            if (Objects.equals(type, "members")) {
+                membersList.append(new PlainText("成员列表: "));
+                for (int x = 0; x < members.size(); x++) {
+                    membersList.append(new PlainText("\n\n成员名称: "));
+                    membersList.append(new PlainText(moJangURLConnect(members.get(x).getAsJsonObject().get("uuid").getAsString(), "uuid")));
+                    membersList.append(new PlainText("\nrank: "));
+                    membersList.append(new PlainText(members.get(x).getAsJsonObject().get("rank").getAsString()));
+                    membersList.append(new PlainText("\n加入时间: "));
+                    instant = Instant.ofEpochMilli(members.get(x).getAsJsonObject().get("joined").getAsLong());
+                    LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    membersList.append(new PlainText(String.valueOf(localDate)));
+                    if (members.get(x).getAsJsonObject().has("questParticipation")) {
+                        membersList.append(new PlainText("\n完成任务: "));
+                        membersList.append(new PlainText(String.valueOf(members.get(x).getAsJsonObject().get("questParticipation").getAsInt())));
+                    }
                 }
-
-                sbMember.append("\n(").append(i).append(")");
-                sbMember.append("\n  uuid: ").append(uuid);
-                sbMember.append("\n  职位: ").append(rank);
-                sbMember.append("\n  加入时间: ").append(localDateTime2);
-                sbMember.append("\n  已完成任务数: ").append(questParticipation);
-                sbMember.append("\n  7天内为公会获取经验值: ").append(totalExp);
             }
-            membersChain.append(new PlainText(String.valueOf(totalMembers)));
-            membersChain.append(new PlainText(sbMember.toString()));
-
-             */
 
             ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
             builder.add(group.getBot().getId(), group.getBot().getNick(), chain.build());
             builder.add(group.getBot().getId(), group.getBot().getNick(), achievementChain.build());
             if (!membersChain.isEmpty()) {
                 builder.add(group.getBot().getId(), group.getBot().getNick(), membersChain.build());
+            }
+            if (!membersList.isEmpty()) {
+                builder.add(group.getBot().getId(), group.getBot().getNick(), membersList.build());
             }
             group.sendMessage(builder.build());
         }
