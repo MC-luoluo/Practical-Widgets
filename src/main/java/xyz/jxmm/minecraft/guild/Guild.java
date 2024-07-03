@@ -11,6 +11,7 @@ import net.mamoe.mirai.message.data.PlainText;
 import xyz.jxmm.minecraft.Nick;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -290,20 +291,32 @@ public class Guild {
             }
 
             if (Objects.equals(type, "members")) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
                 membersList.append(new PlainText("成员列表: "));
                 for (int x = 0; x < members.size(); x++) {
-                    membersList.append(new PlainText("\n\n成员名称: "));
+                    membersList.append(new PlainText("\n\n名称: "));
                     membersList.append(new PlainText(moJangURLConnect(members.get(x).getAsJsonObject().get("uuid").getAsString(), "uuid")));
                     membersList.append(new PlainText("\nrank: "));
                     membersList.append(new PlainText(members.get(x).getAsJsonObject().get("rank").getAsString()));
                     membersList.append(new PlainText("\n加入时间: "));
-                    instant = Instant.ofEpochMilli(members.get(x).getAsJsonObject().get("joined").getAsLong());
-                    LocalDateTime localDate = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
-                    membersList.append(new PlainText(String.valueOf(localDate)));
+                    long t = members.get(x).getAsJsonObject().get("joined").getAsLong();
+                    membersList.append(new PlainText(simpleDateFormat.format(new Date(t))));
+                    /* 消息过长舍去
                     if (members.get(x).getAsJsonObject().has("questParticipation")) {
                         membersList.append(new PlainText("\n完成任务: "));
                         membersList.append(new PlainText(String.valueOf(members.get(x).getAsJsonObject().get("questParticipation").getAsInt())));
+                    }*/
+                    membersList.append(new PlainText("\n周经验: "));
+                    JsonObject expHistory = new JsonObject();
+                    if (determine(members.get(x).getAsJsonObject(), "expHistory")) {
+                        expHistory = members.get(x).getAsJsonObject().get("expHistory").getAsJsonObject();
                     }
+                    set = expHistory.keySet();
+                    sum = 0;
+                    for (String j : set) {
+                        sum += expHistory.get(j).getAsInt();
+                    }
+                    membersList.append(new PlainText(formatExp(sum)));
                 }
             }
 

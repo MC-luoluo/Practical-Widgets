@@ -19,6 +19,7 @@ import xyz.jxmm.minecraft.player.Player;
 import xyz.jxmm.minecraft.sw.SkyWars;
 import xyz.jxmm.minecraft.tnt.TNTGames;
 import xyz.jxmm.minecraft.tourney.tournament;
+import xyz.jxmm.minecraft.fish.Fish;
 import xyz.jxmm.perm.Determine;
 
 import static xyz.jxmm.minecraft.HypURLConnect.hypixelURLConnect;
@@ -149,6 +150,17 @@ public class Hypixel {
             ID.append(handle.replaceAll(" guild ", ""));
             Guild.common(ID.toString(), sender, group, chain);
 
+        } else if (handle.startsWith(" fish ")) {
+            ID.append(handle.replaceAll(" fish ", ""));
+
+            stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
+            json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
+
+            if (!stringBuilder.toString().isEmpty()) {
+                run(type.toString(), json, chain, sender, group);
+            }
+            Fish.fish(json, sender, group);
+
         } else {
             chain.append(new PlainText("指令不完整, 缺少关键字或关键字错误"));
             chain.append(new PlainText("\n" + xyz.jxmm.PracticalWidgets.perfix()));
@@ -162,7 +174,9 @@ public class Hypixel {
                     "\ntnt 掘战游戏" +
                     "\nduels 决斗游戏" +
                     "\nbb 建筑大师" +
-                    "\nguild 公会数据"));
+                    "\nguild 公会数据" +
+                    "\ntourney 锦标赛数据" +
+                    "\nfish 大厅钓鱼"));
             chain.append(new PlainText("\n<playerID> ID & 16进制uuid & 带连接符16进制uuid"));
             /*
                 <tnt>掘战游戏
