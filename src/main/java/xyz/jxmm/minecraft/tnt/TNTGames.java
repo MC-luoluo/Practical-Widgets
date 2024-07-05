@@ -13,7 +13,8 @@ import java.text.DecimalFormat;
 
 public class TNTGames {
     public static void tnt(JsonObject json, Long sender, Group group) {
-        MessageChainBuilder chain = new MessageChainBuilder();
+        MessageChain at = MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]");
+        MessageChainBuilder chain = new MessageChainBuilder().append(at);
 
         if (json.get("player").isJsonObject()) {
             JsonObject playerJson = json.get("player").getAsJsonObject();
@@ -24,7 +25,7 @@ public class TNTGames {
 
                 chain.append(new PlainText(Nick.nick(playerJson) + " "));
                 chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
-                chain.append(new PlainText(" | TNT Games 数据如下:"));
+                chain.append(new PlainText(" | TNT Games数据:"));
 
                 chain.append(new PlainText("\n胜场: "));
                 if (tntJson.has("wins")) {
@@ -44,130 +45,120 @@ public class TNTGames {
                 }
 
 
-                MessageChainBuilder tntag = new MessageChainBuilder();
-                tntag.append(new PlainText("TNT Tag: "));
+                chain.append(new PlainText("\nTNT Tag: "));
 
-                tntag.append(new PlainText("\n胜场: "));
+                chain.append(new PlainText("\n  胜场: "));
                 if (tntJson.has("wins_tntag")) {
-                    tntag.append(new PlainText(String.valueOf(tntJson.get("wins_tntag").getAsInt())));
-                    tntag.append(new PlainText(" | WLR: "));
-                    tntag.append(new PlainText(decimalFormat.format(
-                            (double) tntJson.get("wins_tntag").getAsInt() /
-                                    (double) tntJson.get("deaths_tntag").getAsInt())));
-                } else tntag.append(new PlainText("null"));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("wins_tntag").getAsInt())));
+                    if (tntJson.has("deaths_tntag")) {
+                        chain.append(new PlainText(" | WLR: "));
+                        chain.append(new PlainText(decimalFormat.format(
+                                (double) tntJson.get("wins_tntag").getAsInt() /
+                                        (double) tntJson.get("deaths_tntag").getAsInt())));
+                    }
+                } else chain.append(new PlainText("null"));
 
-                tntag.append(new PlainText("\n击杀: "));
+                chain.append(new PlainText("\n  击杀: "));
                 if (tntJson.has("kills_tntag")) {
-                    tntag.append(new PlainText(String.valueOf(tntJson.get("kills_tntag").getAsInt())));
-                } else tntag.append(new PlainText("null"));
-                tntag.append(new PlainText(" | 死亡:"));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("kills_tntag").getAsInt())));
+                } else chain.append(new PlainText("null"));
+                chain.append(new PlainText(" | 死亡:"));
                 if (tntJson.has("deaths_tntag")) {
-                    tntag.append(new PlainText(String.valueOf(tntJson.get("deaths_tntag").getAsInt())));
-                } else tntag.append(new PlainText("null"));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("deaths_tntag").getAsInt())));
+                } else chain.append(new PlainText("null"));
                 if (tntJson.has("kills_tntag") && tntJson.has("deaths_tntag")) {
-                    tntag.append(new PlainText(" | KDR:"));
-                    tntag.append(new PlainText(decimalFormat.format(
+                    chain.append(new PlainText(" | KDR:"));
+                    chain.append(new PlainText(decimalFormat.format(
                             (double) tntJson.get("kills_tntag").getAsInt() /
                                     (double) tntJson.get("deaths_tntag").getAsInt())));
                 }
 
 
-                MessageChainBuilder tntrun = new MessageChainBuilder();
-                tntrun.append(new PlainText("TNT Run: "));
+                chain.append(new PlainText("\nTNT Run: "));
 
                 if (tntJson.has("record_tntrun")) {
-                    tntrun.append(new PlainText("\n最长生存时间: "));
+                    chain.append(new PlainText("\n  最长生存时间: "));
                     int record = tntJson.get("record_tntrun").getAsInt();
-                    tntrun.append(new PlainText((record / 60) + ":" + String.format("%02d", record % 60)));
+                    chain.append(new PlainText((record / 60) + ":" + String.format("%02d", record % 60)));
                 }
 
-                tntrun.append(new PlainText("\n胜场: "));
+                chain.append(new PlainText("\n  胜场: "));
                 if (tntJson.has("wins_tntrun")) {
-                    tntrun.append(new PlainText(String.valueOf(tntJson.get("wins_tntrun").getAsInt())));
-                } else tntrun.append(new PlainText("null"));
-                tntrun.append(new PlainText(" | 死亡: "));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("wins_tntrun").getAsInt())));
+                } else chain.append(new PlainText("null"));
+                chain.append(new PlainText(" | 死亡: "));
                 if (tntJson.has("deaths_tntrun")) {
-                    tntrun.append(new PlainText(String.valueOf(tntJson.get("deaths_tntrun").getAsInt())));
-                } else tntrun.append(new PlainText("null"));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("deaths_tntrun").getAsInt())));
+                } else chain.append(new PlainText("null"));
                 if (tntJson.has("wins_tntrun") && tntJson.has("deaths_tntrun")) {
-                    tntrun.append(new PlainText(" | WLR: "));
-                    tntrun.append(new PlainText(decimalFormat.format(
+                    chain.append(new PlainText(" | WLR: "));
+                    chain.append(new PlainText(decimalFormat.format(
                             (double) tntJson.get("wins_tntrun").getAsInt() /
                                     (double) tntJson.get("deaths_tntrun").getAsInt())));
                 }
 
 
-                MessageChainBuilder pvprun = new MessageChainBuilder();
-                pvprun.append(new PlainText("PVP TNT Run: "));
+                chain.append(new PlainText("\nPVP TNT Run: "));
 
                 if (tntJson.has("record_pvprun")) {
-                    pvprun.append(new PlainText("\n最长生存时间: "));
+                    chain.append(new PlainText("\n  最长生存时间: "));
                     int record = tntJson.get("record_pvprun").getAsInt();
                     if (record >= 60) {
-                        pvprun.append(new PlainText((record / 60) + ":" + String.format("%02d", record % 60)));
+                        chain.append(new PlainText((record / 60) + ":" + String.format("%02d", record % 60)));
                     } else
-                        pvprun.append(new PlainText("0:" + String.format("%02d", record % 60)));
+                        chain.append(new PlainText("0:" + String.format("%02d", record % 60)));
                 }
 
-                pvprun.append(new PlainText("\n胜场: "));
+                chain.append(new PlainText("\n  胜场: "));
                 if (tntJson.has("wins_pvprun")) {
-                    pvprun.append(new PlainText(String.valueOf(tntJson.get("wins_pvprun").getAsInt())));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("wins_pvprun").getAsInt())));
                     if (tntJson.has("deaths_pvprun")) {
-                        pvprun.append(new PlainText(" | WLR: "));
-                        pvprun.append(new PlainText(decimalFormat.format(
+                        chain.append(new PlainText(" | WLR: "));
+                        chain.append(new PlainText(decimalFormat.format(
                                 (double) tntJson.get("wins_pvprun").getAsInt() /
                                         (double) tntJson.get("deaths_pvprun").getAsInt())));
                     }
-                } else pvprun.append(new PlainText("null"));
+                } else chain.append(new PlainText("null"));
 
-                pvprun.append(new PlainText("\n击杀: "));
+                chain.append(new PlainText("\n  击杀: "));
                 if (tntJson.has("kills_pvprun")) {
-                    pvprun.append(new PlainText(String.valueOf(tntJson.get("kills_pvprun").getAsInt())));
-                } else pvprun.append(new PlainText("null"));
-                pvprun.append(new PlainText(" | 死亡: "));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("kills_pvprun").getAsInt())));
+                } else chain.append(new PlainText("null"));
+                chain.append(new PlainText(" | 死亡: "));
                 if (tntJson.has("deaths_pvprun")) {
-                    pvprun.append(new PlainText(String.valueOf(tntJson.get("deaths_pvprun").getAsInt())));
-                } else pvprun.append(new PlainText("null"));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("deaths_pvprun").getAsInt())));
+                } else chain.append(new PlainText("null"));
                 if (tntJson.has("kills_pvprun") && tntJson.has("deaths_pvprun")) {
-                    pvprun.append(new PlainText(" | KDR: "));
-                    pvprun.append(new PlainText(decimalFormat.format(
+                    chain.append(new PlainText(" | KDR: "));
+                    chain.append(new PlainText(decimalFormat.format(
                             (double) tntJson.get("kills_pvprun").getAsInt() /
                                     (double) tntJson.get("deaths_pvprun").getAsInt())));
                 }
 
 
-                MessageChainBuilder bowspleef = new MessageChainBuilder();
-                bowspleef.append(new PlainText("Bow Spleef: "));
-                bowspleef.append(new PlainText("\n胜场: "));
+                chain.append(new PlainText("\nBow Spleef: "));
+                chain.append(new PlainText("\n  胜场: "));
                 if (tntJson.has("wins_bowspleef")) {
-                    bowspleef.append(new PlainText(String.valueOf(tntJson.get("wins_bowspleef").getAsInt())));
-                } else bowspleef.append(new PlainText("null"));
-                bowspleef.append(new PlainText(" | 死亡: "));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("wins_bowspleef").getAsInt())));
+                } else chain.append(new PlainText("null"));
+                chain.append(new PlainText(" | 死亡: "));
                 if (tntJson.has("deaths_bowspleef")) {
-                    bowspleef.append(new PlainText(String.valueOf(tntJson.get("deaths_bowspleef").getAsInt())));
-                } else bowspleef.append(new PlainText("null"));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("deaths_bowspleef").getAsInt())));
+                } else chain.append(new PlainText("null"));
                 if (tntJson.has("wins_bowspleef") && tntJson.has("deaths_bowspleef")) {
-                    bowspleef.append(new PlainText(" | WLR: "));
-                    bowspleef.append(new PlainText(decimalFormat.format(
+                    chain.append(new PlainText(" | WLR: "));
+                    chain.append(new PlainText(decimalFormat.format(
                             (double) tntJson.get("wins_bowspleef").getAsInt() /
                                     (double) tntJson.get("deaths_bowspleef").getAsInt())));
                 }
                 if (tntJson.has("tags_bowspleef")) {
-                    bowspleef.append(new PlainText("\n射箭数: "));
-                    bowspleef.append(new PlainText(String.valueOf(tntJson.get("tags_bowspleef").getAsInt())));
+                    chain.append(new PlainText("\n  射箭数: "));
+                    chain.append(new PlainText(String.valueOf(tntJson.get("tags_bowspleef").getAsInt())));
                 }
-
-                ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
-                builder.add(group.getBot().getId(), group.getBot().getNick(), chain.build());
-                builder.add(group.getBot().getId(), group.getBot().getNick(), tntag.build());
-                builder.add(group.getBot().getId(), group.getBot().getNick(), tntrun.build());
-                builder.add(group.getBot().getId(), group.getBot().getNick(), pvprun.build());
-                builder.add(group.getBot().getId(), group.getBot().getNick(), bowspleef.build());
-                group.sendMessage(builder.build());
             } else {
                 chain.append(MiraiCode.deserializeMiraiCode("[mirai:at:" + sender + "]")).append(new PlainText(" 该玩家的TNT游戏数据为空"));
-                group.sendMessage(chain.build());
             }
+            group.sendMessage(chain.build());
         }
     }
 }

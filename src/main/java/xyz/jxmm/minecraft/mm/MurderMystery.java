@@ -28,7 +28,7 @@ public class MurderMystery {
             if (playerJson.has("stats") && playerJson.get("stats").getAsJsonObject().has("MurderMystery")) {
                 mmJson = playerJson.get("stats").getAsJsonObject().get("MurderMystery").getAsJsonObject();
 
-                chain.append(new PlainText(Nick.nick(playerJson) + " "));
+                chain.append(new PlainText("\n" + Nick.nick(playerJson) + " "));
                 chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
                 chain.append(new PlainText(" | 密室杀手 数据如下:"));
 
