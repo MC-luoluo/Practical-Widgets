@@ -133,56 +133,56 @@ public class Fish {
                 chain.append(new PlainText("\n钓鱼竿附魔: "));
                 if (enchants.has("lure")) {
                     chain.append(new PlainText(" 饵钓"));
-                    chain.append(new PlainText(String.valueOf(ecLevel(enchants,"lure"))));
+                    chain.append(new PlainText(String.valueOf(ecLevel(enchants, "lure"))));
                     if (Boolean.FALSE.equals(toggle(enchants, "lure"))) {
                         chain.append(new PlainText(" (未启用) |"));
                     }
                 }
                 if (enchants.has("luck")) {
                     chain.append(new PlainText(" 海之眷顾"));
-                    chain.append(new PlainText(String.valueOf(ecLevel(enchants,"luck"))));
+                    chain.append(new PlainText(String.valueOf(ecLevel(enchants, "luck"))));
                     if (Boolean.FALSE.equals(toggle(enchants, "luck"))) {
                         chain.append(new PlainText(" (未启用) |"));
                     }
                 }
                 if (enchants.has("collector")) {
                     chain.append(new PlainText(" 收藏家"));
-                    chain.append(new PlainText(String.valueOf(ecLevel(enchants,"collector"))));
+                    chain.append(new PlainText(String.valueOf(ecLevel(enchants, "collector"))));
                     if (Boolean.FALSE.equals(toggle(enchants, "collector"))) {
                         chain.append(new PlainText(" (未启用) |"));
                     }
                 }
                 if (enchants.has("dumpster_diver")) {
                     chain.append(new PlainText(" 水域环卫工"));
-                    chain.append(new PlainText(String.valueOf(ecLevel(enchants,"dumpster_diver"))));
+                    chain.append(new PlainText(String.valueOf(ecLevel(enchants, "dumpster_diver"))));
                     if (Boolean.FALSE.equals(toggle(enchants, "dumpster_diver"))) {
                         chain.append(new PlainText(" (未启用) |"));
                     }
                 }
                 if (enchants.has("vulcans_blessing")) {
                     chain.append(new PlainText(" 火神祝福"));
-                    chain.append(new PlainText(String.valueOf(ecLevel(enchants,"vulcans_blessing"))));
+                    chain.append(new PlainText(String.valueOf(ecLevel(enchants, "vulcans_blessing"))));
                     if (Boolean.FALSE.equals(toggle(enchants, "vulcans_blessing"))) {
                         chain.append(new PlainText(" (未启用) |"));
                     }
                 }
                 if (enchants.has("neptunes_fury")) {
                     chain.append(new PlainText(" 海神之怒"));
-                    chain.append(new PlainText(String.valueOf(ecLevel(enchants,"neptunes_fury"))));
+                    chain.append(new PlainText(String.valueOf(ecLevel(enchants, "neptunes_fury"))));
                     if (Boolean.FALSE.equals(toggle(enchants, "neptunes_fury"))) {
                         chain.append(new PlainText(" (未启用) |"));
                     }
                 }
                 if (enchants.has("mythical_hook")) {
                     chain.append(new PlainText(" 神话鱼钩"));
-                    chain.append(new PlainText(String.valueOf(ecLevel(enchants,"mythical_hook"))));
+                    chain.append(new PlainText(String.valueOf(ecLevel(enchants, "mythical_hook"))));
                     if (Boolean.FALSE.equals(toggle(enchants, "mythical_hook"))) {
                         chain.append(new PlainText(" (未启用) |"));
                     }
                 }
                 if (enchants.has("herbivore")) {
                     chain.append(new PlainText(" herbivore"));
-                    chain.append(new PlainText(String.valueOf(ecLevel(enchants,"herbivore"))));
+                    chain.append(new PlainText(String.valueOf(ecLevel(enchants, "herbivore"))));
                     if (Boolean.FALSE.equals(toggle(enchants, "herbivore"))) {
                         chain.append(new PlainText(" (未启用)"));
                     }

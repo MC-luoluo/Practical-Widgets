@@ -103,10 +103,10 @@ public class TNTGames {
                 if (tntJson.has("record_pvprun")) {
                     chain.append(new PlainText("\n  最长生存时间: "));
                     int record = tntJson.get("record_pvprun").getAsInt();
-                    if (record >= 60) {
-                        chain.append(new PlainText((record / 60) + ":" + String.format("%02d", record % 60)));
-                    } else
-                        chain.append(new PlainText("0:" + String.format("%02d", record % 60)));
+                    chain.append(new PlainText(record >= 60 ?
+                            (record / 60) + ":" + String.format("%02d", record % 60) :
+                            "0:" + String.format("%02d", record % 60)
+                    ));
                 }
 
                 chain.append(new PlainText("\n  胜场: "));

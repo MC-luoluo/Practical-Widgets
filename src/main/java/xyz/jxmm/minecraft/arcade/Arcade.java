@@ -52,10 +52,10 @@ public class Arcade {
                     chain.append(new PlainText("\n    最佳时间: "));
                     if (fastest_game(dropper)) {
                         double fg = dropper.get("fastest_game").getAsDouble() / 1000;
-                        if (fg >= 60) {
-                            chain.append(new PlainText(((int) fg / 60) + ":" + String.format("%02d", (int) fg % 60) + ":" + String.format("%03d", Math.round((fg - (int) fg) * 1000))));
-                        } else
-                            chain.append(new PlainText(String.format("%02d", (int) fg % 60) + ":" + String.format("%03d", Math.round((fg - (int) fg) * 1000))));
+                        chain.append(new PlainText(fg >= 60 ?
+                                ((int) fg / 60) + ":" + String.format("%02d", (int) fg % 60) + ":" + String.format("%03d", Math.round((fg - (int) fg) * 1000)) :
+                                String.format("%02d", (int) fg % 60) + ":" + String.format("%03d", Math.round((fg - (int) fg) * 1000))
+                        ));
                     } else chain.append(new PlainText("null"));
 
                     chain.append(new PlainText("\n    游玩次数: "));
