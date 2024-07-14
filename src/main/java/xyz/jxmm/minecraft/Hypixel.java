@@ -36,35 +36,37 @@ public class Hypixel {
         //数据部分
         StringBuilder ID = new StringBuilder();
         StringBuilder stringBuilder = new StringBuilder();
-        StringBuilder type = new StringBuilder();
         JsonObject json;
+
+        String type = "";
+        if (handle.endsWith(" all")) {
+            type = "all";
+            handle = handle.replaceAll(" members", "");
+        }
 
         if (handle.startsWith(" bw ")) {
             ID.append(handle.replaceAll(" bw ", ""));//得到玩家ID
-            type.append("bw");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                run(type.toString(), json, chain, sender, group);
+                BedWars.bw(json, sender, group);
             }
 
         } else if (handle.startsWith(" sw ")) {
             ID.append(handle.replaceAll(" sw ", ""));
-            type.append("sw");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                run(type.toString(), json, chain, sender, group);
+                SkyWars.sw(json, sender, group);
             }
 
 
         } else if (handle.startsWith(" player ")) {
             ID.append(handle.replaceAll(" player ", ""));
-            type.append("player");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
@@ -81,46 +83,42 @@ public class Hypixel {
 
         } else if (handle.startsWith(" arc")) {
             ID.append(handle.replaceAll(" arcade ", "").replaceAll(" arc ", ""));
-            type.append("arc");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                run(type.toString(), json, chain, sender, group);
+                Arcade.arc(json, sender, group);
             }
 
         } else if (handle.startsWith(" mm ")) {
             ID.append(handle.replaceAll(" mm ", ""));
-            type.append("mm");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                run(type.toString(), json, chain, sender, group);
+                MurderMystery.mm(json, sender, group, type);
             }
 
         } else if (handle.startsWith(" tnt ")) {
             ID.append(handle.replaceAll(" tnt ", ""));
-            type.append("tnt");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                run(type.toString(), json, chain, sender, group);
+                TNTGames.tnt(json, sender, group);
             }
 
         } else if (handle.startsWith(" duels ")) {
             ID.append(handle.replaceAll(" duels ", ""));
-            type.append("duels");
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                run(type.toString(), json, chain, sender, group);
+                Duels.duels(json, sender, group);
             }
 
         } else if (handle.startsWith(" tourney ")) {
@@ -130,9 +128,8 @@ public class Hypixel {
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                run(type.toString(), json, chain, sender, group);
+                tournament.tourney(json, sender, group);
             }
-            tournament.tourney(json, sender, group);
 
         } else if (handle.startsWith(" bb ")) {
             ID.append(handle.replaceAll(" bb ", ""));
@@ -142,9 +139,8 @@ public class Hypixel {
             JsonObject leaders = new Gson().fromJson(Leaders.leaders(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                run(type.toString(), json, chain, sender, group);
+                BuildBattle.bb(json, leaders, sender, group);
             }
-            BuildBattle.bb(json, leaders, sender, group);
 
         } else if (handle.startsWith(" guild ")) {
             ID.append(handle.replaceAll(" guild ", ""));
@@ -157,9 +153,8 @@ public class Hypixel {
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                run(type.toString(), json, chain, sender, group);
+                Fish.fish(json, sender, group);
             }
-            Fish.fish(json, sender, group);
 
         } else {
             chain.append(new PlainText("指令不完整, 缺少关键字或关键字错误"));
@@ -188,35 +183,6 @@ public class Hypixel {
 
     }
 
-    public static void run(String type, JsonObject json, MessageChainBuilder chain, Long sender, Group group) {
-        if (error(json, chain, group)) {
-            switch (type) {
-                case "bw":
-                    BedWars.bw(json, sender, group);
-                    break;
-
-                case "sw":
-                    SkyWars.sw(json, sender, group);
-                    break;
-
-                case "arc":
-                    Arcade.arc(json, sender, group);
-                    break;
-
-                case "mm":
-                    MurderMystery.mm(json, sender, group);
-                    break;
-
-                case "duels":
-                    Duels.duels(json, sender, group);
-                    break;
-
-                case "tnt":
-                    TNTGames.tnt(json, sender, group);
-                    break;
-            }
-        }
-    }
 
     public static Boolean error(JsonObject json, MessageChainBuilder chain, Group group) {
         return Error.err(json, chain, group);

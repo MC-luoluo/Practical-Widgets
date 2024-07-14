@@ -15,11 +15,11 @@ import static xyz.jxmm.minecraft.mm.MurderMysteryDetermine.*;
 
 public class MurderMystery {
 
-    public static void mm(JsonObject json, Long sender, Group group) {
+    public static void mm(JsonObject json, Long sender, Group group, String type) {
         MessageChainBuilder chain = new MessageChainBuilder();
         JsonObject playerJson;
         JsonObject mmJson;
-        JsonObject quests;
+        //JsonObject quests;
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         if (json.get("player").isJsonObject()) {
@@ -56,15 +56,13 @@ public class MurderMystery {
                     chain.append(new PlainText(String.valueOf(mmJson.get("wins").getAsInt())));
                 } else chain.append(new PlainText("null"));
 
-                //胜率
-                chain.append(new PlainText(" | 胜率: "));
-                if (games_MURDER_CLASSIC(mmJson) && wins_MURDER_CLASSIC(mmJson)) {
+                chain.append(new PlainText(" | WLR: "));
+                if (games(mmJson) && wins(mmJson)) {
                     chain.append(new PlainText(decimalFormat.format(
-                            (float) mmJson.get("wins_MURDER_CLASSIC").getAsInt() /
-                                    (float) mmJson.get("games_MURDER_CLASSIC").getAsInt() *
-                                    100
+                            (float) mmJson.get("wins").getAsInt() /
+                                    (mmJson.get("games").getAsInt() -
+                                            mmJson.get("wins").getAsInt())
                     )));
-                    chain.append(new PlainText("%"));
                 } else chain.append(new PlainText("null"));
 
                 //侦探胜场
@@ -192,15 +190,13 @@ public class MurderMystery {
                     chain.append(new PlainText(String.valueOf(mmJson.get("wins_MURDER_CLASSIC").getAsInt())));
                 } else chain.append(new PlainText("null"));
 
-                //胜率
-                chain.append(new PlainText(" | 胜率: "));
+                chain.append(new PlainText(" | WLR: "));
                 if (games_MURDER_CLASSIC(mmJson) && wins_MURDER_CLASSIC(mmJson)) {
                     chain.append(new PlainText(decimalFormat.format(
                             (float) mmJson.get("wins_MURDER_CLASSIC").getAsInt() /
-                                    (float) mmJson.get("games_MURDER_CLASSIC").getAsInt() *
-                                    100
+                                    (mmJson.get("games_MURDER_CLASSIC").getAsInt() -
+                                            mmJson.get("wins_MURDER_CLASSIC").getAsInt())
                     )));
-                    chain.append(new PlainText("%"));
                 } else chain.append(new PlainText("null"));
 
                 //侦探胜场
@@ -292,15 +288,13 @@ public class MurderMystery {
                     chain.append(new PlainText(String.valueOf(mmJson.get("wins_MURDER_DOUBLE_UP").getAsInt())));
                 } else chain.append(new PlainText("null"));
 
-                //胜率
-                chain.append(new PlainText(" | 胜率: "));
+                chain.append(new PlainText(" | WLR: "));
                 if (games_MURDER_DOUBLE_UP(mmJson) && wins_MURDER_DOUBLE_UP(mmJson)) {
                     chain.append(new PlainText(decimalFormat.format(
                             (float) mmJson.get("wins_MURDER_DOUBLE_UP").getAsInt() /
-                                    (float) mmJson.get("games_MURDER_DOUBLE_UP").getAsInt() *
-                                    100
+                                    (mmJson.get("games_MURDER_DOUBLE_UP").getAsInt() -
+                                            mmJson.get("wins_MURDER_DOUBLE_UP").getAsInt())
                     )));
-                    chain.append(new PlainText("%"));
                 } else chain.append(new PlainText("null"));
 
                 //侦探胜场
@@ -412,15 +406,13 @@ public class MurderMystery {
                     chain.append(new PlainText(String.valueOf(mmJson.get("wins_MURDER_INFECTION").getAsInt())));
                 } else chain.append(new PlainText("null"));
 
-                //胜率
                 if (games_MURDER_INFECTION(mmJson) && wins_MURDER_INFECTION(mmJson)) {
-                    chain.append(new PlainText(" | 胜率: "));
+                    chain.append(new PlainText(" | WLR: "));
                     chain.append(new PlainText(decimalFormat.format(
                             (float) mmJson.get("wins_MURDER_INFECTION").getAsInt() /
-                                    (float) mmJson.get("games_MURDER_INFECTION").getAsInt() *
-                                    100
+                                    (mmJson.get("games_MURDER_INFECTION").getAsInt() -
+                                            mmJson.get("wins_MURDER_INFECTION").getAsInt())
                     )));
-                    chain.append(new PlainText("%"));
                 }
 
                 //击杀
@@ -472,15 +464,13 @@ public class MurderMystery {
                     chain.append(new PlainText(String.valueOf(mmJson.get("wins_MURDER_ASSASSINS").getAsInt())));
                 } else chain.append(new PlainText("null"));
 
-                //胜率
-                chain.append(new PlainText(" | 胜率: "));
+                chain.append(new PlainText(" | WLR: "));
                 if (games_MURDER_ASSASSINS(mmJson) && wins_MURDER_ASSASSINS(mmJson)) {
                     chain.append(new PlainText(decimalFormat.format(
                             (float) mmJson.get("wins_MURDER_ASSASSINS").getAsInt() /
-                                    (float) mmJson.get("games_MURDER_ASSASSINS").getAsInt() *
-                                    100
+                                    (mmJson.get("games_MURDER_ASSASSINS").getAsInt() -
+                                            mmJson.get("wins_MURDER_ASSASSINS").getAsInt())
                     )));
-                    chain.append(new PlainText("%"));
                 } else chain.append(new PlainText("null"));
 
                 //刺客击杀
