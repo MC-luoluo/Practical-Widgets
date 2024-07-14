@@ -41,7 +41,7 @@ public class Hypixel {
         String type = "";
         if (handle.endsWith(" all")) {
             type = "all";
-            handle = handle.replaceAll(" members", "");
+            handle = handle.replaceAll(" all", "");
         }
 
         if (handle.startsWith(" bw ")) {
