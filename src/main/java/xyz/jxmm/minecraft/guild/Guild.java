@@ -137,34 +137,12 @@ public class Guild {
             }
             chain.append(new PlainText(String.valueOf(level)));
 
-            //chain.append(new PlainText("\n经验进度: "));
-
-            int ex/* = json.get("exp").getAsInt()*/;
-            //chain.append(new PlainText(formatExp(ex)));
-
-
-            String target = "100K";
-            exp = json.get("exp").getAsInt();
-            int target1 = 100000;
-            int index = 0;
-            for (int j : expNeeded) {
-                if (exp >= j) {
-                    exp -= j;
-                    target = Tool.exp(index);
-                    target1 = expNeeded[index];
-                    index++;
-                } else break;
-            }
-            while (exp >= 3000000) {
-                target = "3M";
-                target1 = 3000000;
-                exp -= 3000000;
-            }
-            chain.append(new PlainText(
-                    " (" + decimalFormat.format((float) exp / (float) 1000000) +
-                            "/" + target + " " +
-                            decimalFormat.format((float) exp / (float) target1 * 100) +
-                            "%)"));
+            //经验进度
+            int xpLevel = Math.min(level, 14);
+            chain.append(new PlainText(" (" + formatExp(exp) +
+                    "/" + Tool.exp(xpLevel) + " " +
+                    decimalFormat.format((float) exp / expNeeded[xpLevel] * 100) + "%)"
+            ));
 
             //描述
             if (json.has("description")) {
@@ -185,8 +163,7 @@ public class Guild {
 
             achievementChain.append(new PlainText("\n每日最高经验: "));
             if (determine(achievements, "EXPERIENCE_KINGS")) {
-                ex = achievements.get("EXPERIENCE_KINGS").getAsInt();
-                achievementChain.append(new PlainText(formatExp(ex)));
+                achievementChain.append(new PlainText(formatExp(achievements.get("EXPERIENCE_KINGS").getAsInt())));
             } else achievementChain.append(new PlainText("null"));
 
             achievementChain.append(new PlainText("\n公会胜场数: "));
@@ -228,8 +205,8 @@ public class Guild {
             }
 
 
-            List<String> list = new ArrayList<>(set);
-            String date = list.get(0);
+            Iterator<String> iterator = set.iterator();
+            String date = iterator.next();
             int daySum = 0;
             for (int i = 0; i < members.size(); i++) {
                 JsonObject expHistory;
