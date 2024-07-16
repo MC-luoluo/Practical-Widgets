@@ -228,21 +228,23 @@ public class Guild {
             }
 
 
-            achievementChain.append(new PlainText("\n平均每位成员经验:"));
-            //今日
-            achievementChain.append(new PlainText("\n今日: "));
-            if (determine(achievements, "EXPERIENCE_KINGS")) {
-                achievementChain.append(new PlainText(decimalFormat.format(
-                        (float) achievements.get("EXPERIENCE_KINGS").getAsInt() /
-                                (float) members.size())
-                ));
+            List<String> list = new ArrayList<>(set);
+            String date = list.get(0);
+            int daySum = 0;
+            for (int i = 0; i < members.size(); i++) {
+                JsonObject expHistory;
+                if (determine(members.get(i).getAsJsonObject(), "expHistory")) {
+                    expHistory = members.get(i).getAsJsonObject().get("expHistory").getAsJsonObject();
+                } else continue;
+                daySum += expHistory.get(date).getAsInt();
             }
+            achievementChain.append(new PlainText("\n平均每位成员经验:"));
+            achievementChain.append(new PlainText("\n今日: "));
+            achievementChain.append(new PlainText(formatExp((float) daySum / members.size())));
+
             //一周
             achievementChain.append(new PlainText(" | 一周: "));
-            achievementChain.append(new PlainText(decimalFormat.format(
-                    (float) weekExp /
-                            (float) members.size())
-            ));
+            achievementChain.append(new PlainText(formatExp((float) weekExp / members.size())));
 
             if (name != null) {
                 //membersChain.append(new PlainText("name 查询无玩家信息!"));
@@ -489,10 +491,10 @@ public class Guild {
             return decimalFormat.format(ex / 1000) + "K";
         } else if (ex > 1000000 & ex < 1000000000) {
             return decimalFormat.format(ex / 1000000) + "M";
-        }else if (ex > 1000000000) {
+        } else if (ex > 1000000000) {
             return decimalFormat.format(ex / 1000000000) + "B";
         } else {
-            return String.valueOf((int)ex);
+            return String.valueOf((int) ex);
         }
     }
 }
