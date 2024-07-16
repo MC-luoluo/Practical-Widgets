@@ -144,7 +144,7 @@ public class Hypixel {
 
         } else if (handle.startsWith(" guild ")) {
             ID.append(handle.replaceAll(" guild ", ""));
-            Guild.common(ID.toString(), sender, group, chain);
+            Guild.common(ID.toString(), sender, group, chain, type);
 
         } else if (handle.startsWith(" fish ")) {
             ID.append(handle.replaceAll(" fish ", ""));
@@ -173,10 +173,6 @@ public class Hypixel {
                     "\ntourney 锦标赛数据" +
                     "\nfish 大厅钓鱼"));
             chain.append(new PlainText("\n<playerID> ID & 16进制uuid & 带连接符16进制uuid"));
-            /*
-                <tnt>掘战游戏
-                <ww>羊毛战争
-             */
             group.sendMessage(chain.build());
         }
 

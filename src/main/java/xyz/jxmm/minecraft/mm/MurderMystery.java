@@ -33,7 +33,7 @@ public class MurderMystery {
                 }
                 chain.append(new PlainText(Nick.nick(playerJson) + " "));
                 chain.append(new PlainText(json.get("player").getAsJsonObject().get("displayname").getAsString()));
-                chain.append(new PlainText(" | 密室杀手 数据如下:"));
+                chain.append(new PlainText(" | 密室杀手数据:"));
 
                 //硬币
                 chain.append(new PlainText("\n硬币: "));
