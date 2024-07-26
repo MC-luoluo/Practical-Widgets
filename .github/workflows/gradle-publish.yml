@@ -27,6 +27,13 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
+    - name: Read Properties info
+      id: info
+      uses: christian-draeger/read-properties@1.1.1
+      with:
+        path: build.gradle.kts
+        properties: 'version'
+          
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
@@ -39,5 +46,5 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: Package
-        path: build/libs
+        name: "Practical_Widgets-${{ steps.info.outputs.version }}"
+        path: build/libs/*.jar
