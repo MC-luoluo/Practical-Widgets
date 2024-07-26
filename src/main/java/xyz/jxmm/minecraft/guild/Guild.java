@@ -68,6 +68,7 @@ public class Guild {
         MessageChainBuilder preferredGames = new MessageChainBuilder();
         MessageChainBuilder membersList = new MessageChainBuilder();
         MessageChainBuilder membersList2 = new MessageChainBuilder();
+        MessageChainBuilder membersList3 = new MessageChainBuilder();
         MessageChainBuilder gameExp = new MessageChainBuilder();
 
 
@@ -389,7 +390,7 @@ public class Guild {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日-HH时mm分ss秒", Locale.CHINA);
                 membersList.append(new PlainText("成员列表: "));
                 for (int x = 0; x < members.size(); x++) {
-                    if (x <= 60) {
+                    if (x <= 42) {
                         membersList.append(new PlainText("\n\n玩家: "));
                         membersList.append(new PlainText(moJangURLConnect(members.get(x).getAsJsonObject().get("uuid").getAsString(), "uuid")));
                         membersList.append(new PlainText("\nrank: "));
@@ -412,7 +413,7 @@ public class Guild {
                             sum += expHistory.get(j).getAsInt();
                         }
                         membersList.append(new PlainText(formatExp(sum)));
-                    } else {
+                    } else if (x <= 84) {
                         membersList2.append(new PlainText("\n\n玩家: "));
                         membersList2.append(new PlainText(moJangURLConnect(members.get(x).getAsJsonObject().get("uuid").getAsString(), "uuid")));
                         membersList2.append(new PlainText("\nrank: "));
@@ -435,11 +436,35 @@ public class Guild {
                             sum += expHistory.get(j).getAsInt();
                         }
                         membersList2.append(new PlainText(formatExp(sum)));
+                    }else {
+                        membersList3.append(new PlainText("\n\n玩家: "));
+                        membersList3.append(new PlainText(moJangURLConnect(members.get(x).getAsJsonObject().get("uuid").getAsString(), "uuid")));
+                        membersList3.append(new PlainText("\nrank: "));
+                        membersList3.append(new PlainText(members.get(x).getAsJsonObject().get("rank").getAsString()));
+                        membersList3.append(new PlainText("\n加入时间: "));
+                        long t = members.get(x).getAsJsonObject().get("joined").getAsLong();
+                        membersList3.append(new PlainText(simpleDateFormat.format(new Date(t))));
+                        if (members.get(x).getAsJsonObject().has("questParticipation")) {
+                            membersList3.append(new PlainText("\n完成任务: "));
+                            membersList3.append(new PlainText(String.valueOf(members.get(x).getAsJsonObject().get("questParticipation").getAsInt())));
+                        }
+                        membersList3.append(new PlainText("\n周经验: "));
+                        JsonObject expHistory = new JsonObject();
+                        if (determine(members.get(x).getAsJsonObject(), "expHistory")) {
+                            expHistory = members.get(x).getAsJsonObject().get("expHistory").getAsJsonObject();
+                        }
+                        set = expHistory.keySet();
+                        sum = 0;
+                        for (String j : set) {
+                            sum += expHistory.get(j).getAsInt();
+                        }
+                        membersList3.append(new PlainText(formatExp(sum)));
                     }
                 }
             }
 
             ForwardMessageBuilder builder = new ForwardMessageBuilder(group);
+            //
             builder.add(group.getBot().getId(), group.getBot().getNick(), chain.build());
             builder.add(group.getBot().getId(), group.getBot().getNick(), achievementChain.build());
             if (!membersChain.isEmpty()) {
@@ -456,6 +481,9 @@ public class Guild {
             }
             if (!membersList2.isEmpty()) {
                 builder.add(group.getBot().getId(), group.getBot().getNick(), membersList2.build());
+            }
+            if (!membersList3.isEmpty()) {
+                builder.add(group.getBot().getId(), group.getBot().getNick(), membersList3.build());
             }
             group.sendMessage(builder.build());
         }

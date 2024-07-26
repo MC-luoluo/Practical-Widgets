@@ -45,13 +45,15 @@ public class Hypixel {
         }
 
         if (handle.startsWith(" bw ")) {
-            ID.append(handle.replaceAll(" bw ", ""));//得到玩家ID
+            handle = handle.replaceAll(" bw ", "");
+
+            ID.append(handle);//得到玩家ID
 
             stringBuilder.append(analysis(ID.toString(), group, chain));//将玩家信息写入stringBuilder
             json = new Gson().fromJson(stringBuilder.toString(), JsonObject.class);
 
             if (!stringBuilder.toString().isEmpty()) {
-                BedWars.bw(json, sender, group);
+                BedWars.bw(json, sender, group, type);
             }
 
         } else if (handle.startsWith(" sw ")) {
