@@ -10,8 +10,6 @@ import xyz.jxmm.minecraft.Nick;
 
 import java.text.DecimalFormat;
 
-import static xyz.jxmm.minecraft.fish.fishDetermine.*;
-
 
 public class Fish {
     public static void fish(JsonObject json, Long sender, Group group) {
@@ -194,10 +192,7 @@ public class Fish {
         }
         group.sendMessage(chain.build());
     }
-}
 
-
-class fishDetermine {
     public static Boolean toggle(JsonObject json, String str) {
         if (json.get(str).getAsJsonObject().has("toggle")) {
             return json.get(str).getAsJsonObject().get("toggle").getAsBoolean();
@@ -219,4 +214,3 @@ class fishDetermine {
         return 0;
     }
 }
-
