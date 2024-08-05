@@ -292,8 +292,12 @@ public class Guild {
                 preferredGames.append(new PlainText("公会主打游戏: \n"));
                 //preferredGames.append(new PlainText(String.valueOf(json.get("preferredGames").getAsJsonArray())));
                 JsonArray perGames = json.get("preferredGames").getAsJsonArray();
-                for (JsonElement s : perGames) {
-                    preferredGames.append(new PlainText(" " + s));
+                for (int i = 0; i < perGames.size(); i++) {
+                    System.out.println();
+                    preferredGames.append(new PlainText(perGames.get(i).getAsString()));
+                    if (i < perGames.size() - 1) {
+                        preferredGames.append(new PlainText("、"));
+                    }
                 }
             }
 
@@ -436,7 +440,7 @@ public class Guild {
                             sum += expHistory.get(j).getAsInt();
                         }
                         membersList2.append(new PlainText(formatExp(sum)));
-                    }else {
+                    } else {
                         membersList3.append(new PlainText("\n\n玩家: "));
                         membersList3.append(new PlainText(moJangURLConnect(members.get(x).getAsJsonObject().get("uuid").getAsString(), "uuid")));
                         membersList3.append(new PlainText("\nrank: "));
