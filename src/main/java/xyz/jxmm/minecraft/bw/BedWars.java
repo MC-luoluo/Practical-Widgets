@@ -12,8 +12,6 @@ import xyz.jxmm.minecraft.Nick;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-import static xyz.jxmm.minecraft.bw.BedWarsDetermine.*;
-
 public class BedWars {
     //起床战争解析
     public static void bw(JsonObject json, Long sender, Group group, String type) {
@@ -46,7 +44,7 @@ public class BedWars {
             if (json.get("player").getAsJsonObject().get("stats").getAsJsonObject().has("Bedwars")) {
                 JsonObject bwJson = json.get("player").getAsJsonObject().get("stats").getAsJsonObject().get("Bedwars").getAsJsonObject();
 
-                if (games_played_bedwars(bwJson)) {
+                if (bwJson.has("games_played_bedwars") && bwJson.has("Experience")) {
                     chain.append(new PlainText("\n游戏场次: "));
                     chain.append(new PlainText(String.valueOf(bwJson.get("games_played_bedwars").getAsInt())));
                     chain.append(new PlainText(" | 等级: "));

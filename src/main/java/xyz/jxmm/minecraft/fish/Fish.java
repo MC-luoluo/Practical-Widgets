@@ -8,8 +8,6 @@ import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
 import xyz.jxmm.minecraft.Nick;
 
-import java.text.DecimalFormat;
-
 
 public class Fish {
     public static void fish(JsonObject json, Long sender, Group group) {
@@ -20,8 +18,6 @@ public class Fish {
         MessageChainBuilder water = new MessageChainBuilder();
         MessageChainBuilder lava = new MessageChainBuilder();
         MessageChainBuilder ice = new MessageChainBuilder();*/
-
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         //判断是否存在fishing数据
         if (json.get("player").getAsJsonObject().has("stats") &&

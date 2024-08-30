@@ -2,7 +2,6 @@ package xyz.jxmm.minecraft;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import xyz.jxmm.minecraft.player.PlayerDetermine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +23,7 @@ public class Nick {
                 default:
                     return "[" + r1 + "]";
             }
-        } else if (PlayerDetermine.rank(json)) {
+        } else if (json.has("newPackageRank")) {
             String rank = json.get("newPackageRank").getAsString();
             boolean rankPlus = json.has("monthlyPackageRank");
             switch (rank) {
